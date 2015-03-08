@@ -1,0 +1,227 @@
+\documentclass[fontsize=5pt]{scrartcl}
+
+%
+% Original Page by LinuxMercedes
+%
+
+\usepackage[
+        nohead,
+        nofoot,
+        left=0.55in,
+        right=0.55in,
+        top=0.55in,
+        bottom=0.55in,
+]{geometry}
+
+\usepackage{amsmath,scalefnt}
+
+\renewcommand*{\arraystretch}{.5}
+
+\usepackage{multicol}
+\setlength{\columnsep}{5pt}
+
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\pagenumbering{gobble}
+
+\usepackage{enumitem}
+\setlist[itemize]{itemsep=-2pt, itemindent=0pt, leftmargin=*}
+\setlist[enumerate]{itemsep=-2pt, itemindent=0pt, leftmargin=*}
+
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{-1pt}{-1pt}{-1pt}
+\titlespacing{\subsection}{-1pt}{-1pt}{-1pt}
+
+\usepackage{listings}
+
+%Y hoy yo reza que no empleo ni alma pobre encontrará esta magica negra.
+%This is a custom 'tight' matrix for this cheatsheet. It's ugly.
+\newenvironment{tmatrix}%
+{ 
+  %\scalefont{.5}
+  %\setlength{\tabcolsep}{5pt}
+  $\left[\hspace{-3.5pt}\begin{array}{c@{\hspace{1pt}}c@{\hspace{1pt}}c@{\hspace{1pt}}|@{\hspace{0pt}}c}
+}%
+{
+   \end{array}\hspace{-3.5pt}\right]$
+}
+
+\newenvironment{tmatrix3}%
+{ 
+  %\scalefont{.5}
+  %\setlength{\tabcolsep}{5pt}
+  $\left[\hspace{-3.5pt}\begin{array}{c@{\hspace{1pt}}@{\hspace{1pt}}c@{\hspace{1pt}}c@{\hspace{3pt}}}
+}%
+{
+   \end{array}\hspace{-3.5pt}\right]$
+}
+
+\newenvironment{tmatrix1}%
+{ 
+  $\left[\hspace{-3.5pt}\begin{array}{c@{\hspace{3pt}}}
+}%
+{
+   \end{array}\hspace{-3.5pt}\right]$
+}
+
+
+%was 3 3 3 3
+\DeclareMathSizes{3pt}{3pt}{3pt}{3pt}
+
+\begin{document}
+
+\begin{multicols}{3}
+  \section{Definitions}
+    \begin{itemize}
+      \item \textbf{Operating Systems}: exploit hardware resources (many processors), provide a set of services to users, manage secondary memory and I/O, %
+          and provide networking/comm. support. Elements of an OS:
+      \begin{itemize}
+        \item Processor
+        \item Main Memory (real/primary)
+        \item I/O Modules: secondary memory devices, comms equipment, terminals
+        \item System bus: communication among processors, memory, and I/O modules
+       \end{itemize}
+       \item \textbf{Interrupts}: interrupts the normal sequence of execution. Improve processing efficiency and lets the processor not wait on things.
+       \item \textbf{ISR}: Interrupt service routine, handles interrupts. Whenever  there is an interrupt, control is transferred to this program.  %
+                       It determines the nature of the interrupt and performs the necessary actions to handle it.
+       \item \textbf{Multithreading}: Executing an application using parts of it, which were divided into threads. 
+       \item \textbf{Thread}: Dispatchable unit of work, has its own data area and processor context, execute sequentially.
+       \item \textbf{Process}: A collection of one or more threads and resources.
+       \item \textbf{SMP}: Symmetrix MultiProcessing, multiple, connected, homogenus processors using shared memory.
+                           Threads can be scheduled across all processors. Also refers to the hardware model it runs on, with
+                           many processors.
+                          
+    \end{itemize}
+
+  \section{Diagrams}
+    \begin{enumerate}
+      \item Process Interrupt Cycle: 
+    \end{enumerate}
+    
+  \section{Lectures}
+      \begin{itemize}
+        \item \textbf{Interrupt Types}: Program interrupts (arithmetic overflow, division by zero, execute illegal instruction), timer, I/O interrupt, HW failure.
+      \end{itemize}
+    \subsection{Unix}
+      \begin{itemize}
+       \item Processor States:
+        \begin{itemize}
+         \item User Running: executing in user mode.
+         \item Kernel Running: executing in kernel mode.
+         \item Ready to run, in memory: Ready to run as soon as the kernel schedules it.
+         \item Asleep in memory: Unable to execute until an event occurs; process is in main memory, blocked state.
+         \item Ready to run, swapped: Ready to run but moved off main memory.
+         \item Sleeping, swapped: awaiting an event but moved off main memory.
+         \item Preempted: process is returning from kernel to user mode, but the kernel preempts it and does a process switch
+               to schedule another process. Very similar/same as ready to run, in memory.
+         \item Created: newly created and ready to run.
+         \item Zombie: no longer exists and left a record for its parent to clean up.
+        \end{itemize}
+        \item Unix Modes: user mode, less privileged, usually user programs. System/supervisor/kernel: privileged.
+      \end{itemize}
+      
+     \subsection{Threads}
+      \begin{itemize}
+       \item Many approaches: 
+       \begin{itemize}
+        \item Single Thread (DOS). One process, one thread.
+        \item Multithreaded: Java ``green'' threads, one process many threads.
+        \item Unix variants: many processes one thread each.
+        \item Windows/Solaris/Unix: Many processes, many threads each.
+       \end{itemize}
+       \item Threads have their own execution state (running/ready), state is saved when not running, execution stacks, 
+             some of their own storage for variables, and access to all memory and resources of its process.
+       \item Way cheaper to make and destroy than a new process due to shared memory.
+       \item Switching to a thread is cheaper.
+       \item {{POSIX THREAD PLACEHOLDER}}
+      \end{itemize}
+      
+      \subsection{Concurrency}
+        \begin{itemize}
+         \item Mutual Exclusion: Only one process can be in a critical section at a time. Without this, results aren't consistent.
+         \begin{itemize}
+          \item Disabling interrupts: this guarantees mutual exclusion but is exploitable for user processes. 
+          \item Lock variables: Processes must have a lock to run or modify variables (GIT). Sleep in process while locked
+                get(lock), run our code, and release(lock).
+          \item Semaphores, which can define get(lock) and release(lock), 
+         \end{itemize}
+
+        \end{itemize}
+
+
+      
+  \section{Lectures}
+    
+      
+  \section{Glossary}
+    \subsection{Something here}
+    
+  \section{QA Pool}
+    \subsection{T/F - Process Dynamics}
+        \begin{itemize}
+          \item Multiprogramming (having more programs in RAM simultaneously) decreases total CPU efficiency: false. Jobs can be chosen as things have to wait, having several
+                in memory increases your capability of this. CPU will never be idle.
+          \item Unlike \textbf{time sharing systems}, the principal objective of \textbf{batch processing systems} is to minimize response time. False: principal objective for time sharing is to 
+                minimize response time. Whereas, the principal objective for batch processing is to maximize processor use.
+          \item A forked process shares its parent's data space at all times: false.
+          \item A forked process may share code space with its parent. true.
+          \item A forked process may share a Run-Time Stack with its parent. false.
+          \item Context switch means a process switching from a ``blocked state'' to ``ready state''. false
+          \item In the ``zombie'' state, the process no longer exists but it leaves a record for its parent process to collect. true.
+          \item While DMA (Direct Memory Access) is taking place, processor is free
+                to do other things. The processor is only involved at the beginning
+                and end of the DMA transfer. True
+          \item If a process uses up its allocated time slot, a timer interrupt occurs
+                and the process is placed in a BLOCKED Queue. False -> ready.
+          
+                
+          
+        \end{itemize}
+    
+    \subsection{OS Related Questions}
+      \begin{itemize}
+          \item Many modern O.S. use a \textbf{microkernel} design, what does that mean? Microkernel is a small privileged OS core that provides process
+                scheduling, memory management, and communication services and relies on other processes to perform some of the functions 
+                traditionally associated with the operating system kernel. It's slimmer.
+          \item What are \textbf{monolithic} kernels? Old OSs had Monolithic kernels which are large kernels containing
+                virtually the complete operating system, including scheduling, file 
+                system, device drivers, and memory management.  All the functional
+                components of the kernel have access to all of its internal data
+                structures and routines. Examples of such systems are: UNIX, MS-DOS.
+          \item Linux is a monolithic kernel: true but it allows user-installable modules.
+          \item What is dual mode operation? User mode vs supervisor mode.
+          \item Why does a machine need dual mode operation? To ensure proper operation, we must protect the operating system and all 
+                the programs and their data from any malfunctioning program. 
+                The protection is accomplished by designating some of the machine
+                instructions that may cause harm as "privileged" instructions.
+                Dual mode operations can protect the OS from errant users, and the users from one another. 
+                It also prevents the abuse of priviledged instructions (such as 'interrupt enable/disable')
+                by the user programs.
+          \item What is a \textbf{context switch}? Switching the CPU to another process.
+          \item What information is saved and restored during a context switch? Context switch requires saving the state of the old process and
+                loading the saved state for the new process. Process state
+                minimally includes current contents of registers, program counter,
+                stack pointer, file descriptors, etc. 
+
+          \item Why are context switches considered undesirable (to be minimized) by OS designers? They waste a great deal of CPU time when save/load states.
+          \item \textunderscore{Unix process tree here}
+          \item Give an example event for each transition to occur.(You need to
+                give at least five example events).
+                %{create process}: user starts a new process or a program
+                %  issues a fork() or a pthread_create() call.
+                %{cpu available}: the process currently occupying CPU stops running
+                %  and the process in front of the READY queue is scheduled to run
+                %{time expires}: currently running process uses up its alloted time
+                %  slot for this turn (timer interrupt).
+                %{event wait}: the process issues an I/O read
+                %{event completed}: DMA controller interrupts CPU signalling the
+                %  completion of an I/O read
+                %{exit system}: process terminates or segmentation fault
+
+
+
+      \end{itemize}
+  \end{multicols}
+\end{document}
+

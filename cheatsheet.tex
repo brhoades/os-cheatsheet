@@ -85,25 +85,31 @@
        \item \textbf{Interrupts}: interrupts the normal sequence of execution. Improve processing efficiency and lets the processor not wait on things.
        \item \textbf{ISR}: Interrupt service routine, handles interrupts. Whenever  there is an interrupt, control is transferred to this program.  %
                        It determines the nature of the interrupt and performs the necessary actions to handle it.
+
+    \end{itemize}
+     \subsection{Processing}
+      \begin{itemize}       
        \item \textbf{Multithreading}: Executing an application using parts of it, which were divided into threads. 
        \item \textbf{Thread}: Dispatchable unit of work, has its own data area and processor context, execute sequentially.
        \item \textbf{Process}: A collection of one or more threads and resources.
        \item \textbf{SMP}: Symmetrix MultiProcessing, multiple, connected, homogenus processors using shared memory.
                            Threads can be scheduled across all processors. Also refers to the hardware model it runs on, with
                            many processors.
-                          
-    \end{itemize}
+        \item \textbf{Deadlocks}: One process is waiting on another to finish.
+        \item \textbf{Starvation}: A process is postponed indefinitely and does not wake.
+      \end{itemize}    
 
   \section{Diagrams}
     \begin{enumerate}
       \item Process Interrupt Cycle: 
+      \item semaphore example from 5 slide 12
     \end{enumerate}
     
-  \section{Lectures}
+   \section{Interrupts}
       \begin{itemize}
         \item \textbf{Interrupt Types}: Program interrupts (arithmetic overflow, division by zero, execute illegal instruction), timer, I/O interrupt, HW failure.
       \end{itemize}
-    \subsection{Unix}
+    \section{Unix}
       \begin{itemize}
        \item Processor States:
         \begin{itemize}
@@ -121,7 +127,7 @@
         \item Unix Modes: user mode, less privileged, usually user programs. System/supervisor/kernel: privileged.
       \end{itemize}
       
-     \subsection{Threads}
+     \section{Threads}
       \begin{itemize}
        \item Many approaches: 
        \begin{itemize}
@@ -137,17 +143,35 @@
        \item {{POSIX THREAD PLACEHOLDER}}
       \end{itemize}
       
-      \subsection{Concurrency}
+      \section{Concurrency}
         \begin{itemize}
-         \item Mutual Exclusion: Only one process can be in a critical section at a time. Without this, results aren't consistent.
+          \item Mutual Exclusion: Only one process can be in a critical section at a time. Without this, results aren't consistent.
+          \item Critical Section: CS. Used a lot to encapsulate important parts of code.
+  
          \begin{itemize}
           \item Disabling interrupts: this guarantees mutual exclusion but is exploitable for user processes. 
           \item Lock variables: Processes must have a lock to run or modify variables (GIT). Sleep in process while locked
                 get(lock), run our code, and release(lock).
-          \item Semaphores, which can define get(lock) and release(lock), 
+          \item Semaphores, almost universally using Dijkstra's Semaphore.
          \end{itemize}
 
+       \end{itemize}
+       \subsection{Semaphores}
+         An unsigned number variable, s, which can only be changed or tested by two atomic functions:
+         \begin{itemize}
+          \item $P(s)$: [ while(s==0) {wait}; s = s-1; ]
+          \item $V(s)$: [ s = s + 1; ]
+         \end{itemize}
+         Semaphores are:
+         \begin{itemize}
+          \item Conceptualized and have no specific purpose in mind. However, for us, P is get and
+                V release.
+          \item Semaphore locks will add items to a queue as they wait for the lock to release. See Semaphore example.
+          \item Starvation and Deadlocks do not happen in Semaphore locks when used properly
+          \item However if two locks in a semaphore are waiting on each other, this deadlocks.
         \end{itemize}
+       \subsection{Producer/Consumer Problem}
+         
 
 
       
@@ -173,7 +197,7 @@
                 to do other things. The processor is only involved at the beginning
                 and end of the DMA transfer. True
           \item If a process uses up its allocated time slot, a timer interrupt occurs
-                and the process is placed in a BLOCKED Queue. False -> ready.
+                and the process is placed in a BLOCKED Queue. False, ready.
           
                 
           

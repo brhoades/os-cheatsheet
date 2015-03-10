@@ -102,8 +102,11 @@
         \item \textbf{Hold \& Wait}: A process holds some resource while waiting for / requesting another. You can either force a process to request all resources ahead of time,
                                     or force it to release all other resources first.
         \item \textbf{Preemption}: OS forces a process to release its resources. 
-        \item \textbf{Circular Wait}: A process waits on another process's resources to free up while that process waits on the first one. (Circular)
-                                      Can be prevented with resource request strategies.
+        \item \textbf{Circular Wait}: A process waits on another process's resources to free up while that process waits on the first one.
+                                      Can be prevented with resource request strategies or by having resources ordered with processes waiting for them in order.
+      \end{itemize}
+      \subsection{Unix}
+      \begin{itemize}
         \item \textbf{Unix Concurrency Mechanisms}:
         \begin{itemize}
           \item Shared memory   Signals
@@ -120,14 +123,11 @@
         \item \textbf{Unix Fork}: child process is spawned with separate data space than parent process, but shares code space.
         \item \textbf{Unix pthread}: thread shares data space, code space, and os resources (file descriptor table), but the have a unique thread ID, 
                                       register state, stack, priority, and PC.
-
-
-      \end{itemize}    
+     \end{itemize}    
 
   \section{Diagrams}
     \includegraphics[scale=0.2]{process_state.png} \\
-     \includegraphics[scale=0.2]{interrupt_cycle.png} \\
-      {{semaphore example from 5 slide 12}}
+    \includegraphics[scale=0.2]{interrupt_cycle.png} \\
     
    \section{Interrupts}
       \begin{itemize}
@@ -149,6 +149,17 @@
          \item Zombie: no longer exists and left a record for its parent to clean up.
         \end{itemize}
         \item Unix Modes: user mode, less privileged, usually user programs. System/supervisor/kernel: privileged.
+        \item Signals can be raised through C with kill(<pid>, <signal>); ie kill(1,SIGINT);
+        \item Common signals:
+        \begin{itemize}
+          \item SIGHUP, hangup
+          \item SIGINT, Interrupt (ctrl+c)
+          \item SIGQUIT, quit (ctrl+\textbacklash)
+          \item SIGKILL, kill process
+          \item SIGTERM, terminate software
+          \item SIGCHLD, child terminated
+        \end{itemize}
+
       \end{itemize}
       
      \section{Threads}
@@ -164,7 +175,6 @@
              some of their own storage for variables, and access to all memory and resources of its process.
        \item Way cheaper to make and destroy than a new process due to shared memory.
        \item Switching to a thread is cheaper.
-       \item {{POSIX THREAD PLACEHOLDER}}
       \end{itemize}
       
       \section{Concurrency}
@@ -181,9 +191,9 @@
 
        \end{itemize}
        \subsection{Semaphores}
-         An unsigned number variable, s, which can only be changed or tested by two atomic functions:
+         A \textunderscore{nonnegative} number variable, s can only be changed or tested by two atomic functions:
          \begin{itemize}
-          \item $P(s)$: [ while(s==0) {wait}; s = s-1; ]
+          \item $P(s)$: [ while($s<=0$) \{wait\}; s = s-1; ]
           \item $V(s)$: [ s = s + 1; ]
          \end{itemize}
          Semaphores are:
@@ -193,7 +203,7 @@
           \item P is also wait( ), get( ), and pthread\_mutex\_lock( ).
           \item V is also release( ), signal( ), and pthread\_mutex\_unlock( ).
           \item Semaphore locks will add items to a queue as they wait for the lock to release. See Semaphore example.
-          \item Starvation and Deadlocks do not happen in Semaphore locks when used properly
+          \item Starvation and Deadlocks do not happen in Semaphore locks when used properly.
           \item However if two locks in a semaphore are waiting on each other, this deadlocks.
         \end{itemize}
         
@@ -201,7 +211,7 @@
        \subsection{Deadlock}
          \begin{itemize}
           \item \textbf{Deadlocks}: One process is waiting on another to finish, round and round. Nothing is processed. This implies starvation but not vice-versa.
-          \item Deadlocks will not occur where: r > (m-1)*p (r = # of resources, m = max resource per process, p = # of processes)
+          \item Deadlocks will not occur where: $r>(m-1)*p$ (r=\# of resources, m=max resource per process, p=\# of processes)
           \item \textbf{Deadlock Prevention}: See definitions. This can be prevented if any of the following are false:
           \begin{itemize}
             \item No Mutual Exclusion
@@ -279,13 +289,6 @@
           \item \textbf{Statement}: The analogy is based upon a hypothetical barber shop with one barber. The barber has one barber chair and a waiting room with a number of chairs in it. When the barber finishes cutting a customer's hair, he dismisses the customer and then goes to the waiting room to see if there are other customers waiting. 
                                     If there are, he brings one of them back to the chair and cuts his hair. If there are no other customers waiting, he returns to his chair and sleeps in it.
         \end{itemize}
-
-
-
-
-      
-  \section{Lectures}
-    
       
   \section{Glossary}
     \begin{itemize}
@@ -325,7 +328,7 @@
           \item A forked process may share a Run-Time Stack with its parent. false.
           \item Context switch means a process switching from a ``blocked state'' to ``ready state''. false
           \item In the ``zombie'' state, the process no longer exists but it leaves a record for its parent process to collect. true.
-          \item While DMA (Direct Memory Access) is taking place, processor is free
+          \item While DMA is taking place, processor is free
                 to do other things. The processor is only involved at the beginning
                 and end of the DMA transfer. True
           \item If a process uses up its allocated time slot, a timer interrupt occurs
@@ -352,7 +355,7 @@
                 The protection is accomplished by designating some of the machine
                 instructions that may cause harm as "privileged" instructions.
                 Dual mode operations can protect the OS from errant users, and the users from one another. 
-                It also prevents the abuse of priviledged instructions (such as 'interrupt enable/disable')
+                It also prevents the abuse of privileged instructions (such as 'interrupt enable/disable')
                 by the user programs.
           \item What information is saved and restored during a context switch? Context switch requires saving the state of the old process and
                 loading the saved state for the new process. Process state

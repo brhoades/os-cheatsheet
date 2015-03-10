@@ -4,7 +4,7 @@ semaphore s=1, n=0, e=sizeofbuffer;
 void producer() {
   while(true) {
     produce( );
-    semWait(e); // P( ) 
+    semWait(e);   // P( ) 
     semWait(s); 
     append( );
     semSignal(s); // V( )
@@ -14,7 +14,7 @@ void producer() {
 
 void consumer() {
   while(true) {
-    semWait(n); // prevent empty buffer
+    semWait(n);   // prevent empty buffer
     semWait(s);
     take( );
     semSignal(s); // buffer is unlocked

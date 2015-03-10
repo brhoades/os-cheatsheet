@@ -149,12 +149,17 @@
          \item Zombie: no longer exists and left a record for its parent to clean up.
         \end{itemize}
         \item Unix Modes: user mode, less privileged, usually user programs. System/supervisor/kernel: privileged.
-        \item Signals can be raised through C with kill(<pid>, <signal>); ie kill(1,SIGINT);
+        \item Including <signal.h> provides:
+        \begin{itemize}
+          \item Raising with kill(<pid>, <signal>); ie kill(1,SIGINT);
+          \item Ignoring with signal(<num/id>, SIG\_IGN);
+          \item Handling with signal(<num/id>, handlerfunc);
+        \end{itemize}
         \item Common signals:
         \begin{itemize}
           \item SIGHUP, hangup
           \item SIGINT, Interrupt (ctrl+c)
-          \item SIGQUIT, quit (ctrl+\textbacklash)
+          \item SIGQUIT, quit (ctrl+\textbackslash)
           \item SIGKILL, kill process
           \item SIGTERM, terminate software
           \item SIGCHLD, child terminated
@@ -191,7 +196,7 @@
 
        \end{itemize}
        \subsection{Semaphores}
-         A \textunderscore{nonnegative} number variable, s can only be changed or tested by two atomic functions:
+         A \textit{nonnegative} number variable, s can only be changed or tested by two atomic functions:
          \begin{itemize}
           \item $P(s)$: [ while($s<=0$) \{wait\}; s = s-1; ]
           \item $V(s)$: [ s = s + 1; ]
@@ -255,7 +260,7 @@
   \section{Problems}
       \subsection{Producer/Consumer Problem}
       \begin{itemize}
-        \item \textbf{Statement}: 1+ producer are generation data and putting it into some buffer. A single consumer is removing items out one at a time.
+        \item \textbf{Statement}: 1+ producer are generating data and putting it into some buffer. A single consumer is removing items out, one at a time.
         \item Problem to solve: only one producer or consumer should be accessing the buffer at any time.
         \item One solution is to use 3 semaphores on both in a while loop. s counts the lock for a full pool, while n counts the number of items, and e the size of the buffer.
         \lstinputlisting{producer.consumer.c}
@@ -298,6 +303,7 @@
                               for example, the calling of an error diagnostic routine that may receive control at any time during the execution of a program.
       \item \textbf{Atomic Operation} – An operation which cannot be split into more operations. Examples: primitive types: read and write, fetch-and-add, compare-and-swap. 
       \item \textbf{Busy waiting} – the repeated execution of a loop of code while waiting for an event to occur
+      \item \textbf{Consumable Resource} – only available once such as message send, also can cause \textbf{deadlocks}.
       \item \textbf{Context Switch} – an operation that switches the processor from one process to another, by saving all the process control block, registers, and other information for the first and 
                                       replacing them with the process information for the second
       \item \textbf{Direct Memory Access (DMA)} – a form of I/O in which a special module, called a DMA module, controls the exchange of data between main memory and an I/O device.  
@@ -310,7 +316,8 @@
       \item \textbf{Preemption} – reclaiming a resource from a process before the process has finished using it.
       \item \textbf{Process Image} – all of the ingredients of a process, including program, data, stack, and process control block
       \item \textbf{Reusable Resource} – can be used several times, cause for \textbf{deadlock} often. semaphore, CPU, etc
-      \item \textbf{Consumable Resource} – only available once such as message send, also can cause \textbf{deadlocks}.
+      \item \textbf{Race Condition} – an undesirable situation that occurs when a device or system attempts to perform two or more operations at the same time, but because of the nature of the device or system, 
+      the operations must be done in the proper sequence in order to be done correctly.
       \item \textbf{Round Robin} – a scheduling algorithm in which processes are activated in a fixed cyclic order.  Those which cannot proceed because they are waiting for some event 
                     (e.g., termination of a child process or an input/output operation) simply return control to the scheduler.
       \item \textbf{Time Sharing} – the concurrent use of a device by a number of users

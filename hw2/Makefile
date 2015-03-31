@@ -34,4 +34,4 @@ clean:
 memorysimulator.o: memorysimulator.cpp memorysimulator.h program.o page.o
 program.o: program.cpp program.h
 page.o: page.h page.cpp
-main.o: main.cpp
+main.o: main.cpp memorysimulator.o 

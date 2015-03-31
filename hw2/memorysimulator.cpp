@@ -24,8 +24,8 @@ MemorySimulator::MemorySimulator( int argc, char* argv[] )
   if( m_pageSize <= 0 || m_pageSize > AVAILABLE_FRAMES )
     throw domain_error( "Page size is not within range ( > 0 but < AVAILABLE_FRAMES )" );
     
-  if( (float) sqrt( m_pageSize ) - sqrt( m_pageSize ) != 0 )
-    throw domain_error( "Page size is not a multiple of two." );
+  if( pow( 2, (int)log2( m_pageSize ) ) != pow( 2, log2( m_pageSize ) ) )
+    throw domain_error( "Page size is not a power of two." );
 
   if( !strcmp( "clock", argv[4] ) || !strcmp("c", argv[4] ) )
     m_rAlgo = ALGO_CLOCK;
@@ -72,7 +72,7 @@ void MemorySimulator::readPrograms( )
     unsigned int num, numPages;  
     m_progList >> num >> numPages;
 
-    if( i != 0 )
+    if( i == 0 )
       m_programs[i] = Program( num, 0, numPages );
     else
       m_programs[i] = Program( num, m_programs[i-1].lastPage( ), numPages ); 

@@ -99,9 +99,12 @@ void MemorySimulator::prepareMemory( )
       size = memEach;
     else
       size = m_programs[i].numPages( );
-    for( int j=0; j<size; j++ )
+
+    m_programs[i].m_mm_first = i * memEach;
+    m_programs[i].m_mm_last = (i+1) * memEach - 1;
+    for( unsigned int j=0; j<size; j++ )
     {
-      int num = i * memEach + j;
+      unsigned int num = i * memEach + j;
 
       m_memory[num].m_owner = i;
       m_memory[num].m_used = true;
@@ -116,12 +119,46 @@ void MemorySimulator::run( )
   {
     unsigned int progNum, word;
 
+    m_PC++;
     m_progTrace >> progNum >> word;
 
-    m_PC++;
+    access( progNum, word );
   }
 }
 
+void MemorySimulator::access( unsigned int num, unsigned int word )
+{
+  if( num >= m_numPrograms )
+  {
+    stringstream ss;
+    ss << "Program #" << num << " requesting word #" << word << " does not exist";
+    throw domain_error( ss.str( ) );
+  }
+
+  if( word < 0 || word > m_programs[num].numPages( ) )
+  {
+    stringstream ss;
+    ss << "Page #" << word << " for program #" << num << " does not exist (only has " << m_programs[num].numPages( ) << " pages)";
+    throw domain_error( ss.str( ) ); 
+  }
+
+  unsigned int min = m_programs[num].firstPage( ), max = m_programs[num].lastPage( );
+
+  // Convert word to absolute page number
+  word += min;
+
+  // Check if this page is in memory 
+  for( unsigned int i=m_programs[num].m_mm_first; i<m_programs[num].m_mm_last; i++ )
+  {
+    if( m_memory[i].m_used && m_memory[i].m_contents == word )
+    {
+      m_memory[i].update( m_PC );
+      return;
+    }
+  }
+
+  m_pageFaults++;
+}
 
 unsigned int MemorySimulator::lastPage( ) const
 {

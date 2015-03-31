@@ -2,7 +2,7 @@
 
 Page::Page( )
 {
-  m_owner = m_used = m_accessed = 0;
+  m_owner = m_used = m_accessed = m_contents = 0;
 }
 
 void Page::update( unsigned int PC )

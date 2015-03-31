@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <string.h>
 #include <stdlib.h> 
 #include "program.h"
@@ -31,6 +32,7 @@ class MemorySimulator
     void prepareMemory( );
 
     void run( ); 
+    void access( unsigned int, unsigned int );
 
     //void lru( unsigned int );
 

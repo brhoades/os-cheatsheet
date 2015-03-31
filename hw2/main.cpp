@@ -7,5 +7,7 @@ int main( int argc, char* argv[] )
 {
   MemorySimulator sim( argc, argv );
 
+  sim.run( );
+
   return 0;
 }

@@ -11,6 +11,7 @@ CFLAGS=-g -Wall -W -pedantic-errors
 
 OBJECTS=memorysimulator.o \
         program.o \
+        page.o \
         main.o
 
 .SUFFIXES: .cpp
@@ -30,6 +31,7 @@ clean:
 	-@rm -f driver > /dev/null 2>&1
 	-@rm -f $(OBJECTS) > /dev/null 2>&1
 
-memorysimulator.o: memorysimulator.cpp memorysimulator.h program.o
+memorysimulator.o: memorysimulator.cpp memorysimulator.h program.o page.o
 program.o: program.cpp program.h
+page.o: page.h page.cpp
 main.o: main.cpp

@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdlib.h> 
 #include "program.h"
+#include "page.h"
 
 #define ALGO_CLOCK 0
 #define ALGO_LRU   1
@@ -27,16 +28,19 @@ class MemorySimulator
     ~MemorySimulator( );
 
     void readPrograms( );
+    void prepareMemory( );
 
     unsigned int lastPage( ) const;
 
   private:
-    unsigned int m_frames, m_rAlgo;
+    unsigned int m_frames, m_rAlgo, m_PC, m_pageFaults;
     bool m_pagePolicy;
 
     fstream m_progList, m_progTrace;
 
     Program* m_programs;
+    Page* m_memory;
+    
     unsigned int m_numPrograms;
     unsigned int m_pageSize;
     unsigned int m_lastPage;

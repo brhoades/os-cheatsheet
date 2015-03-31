@@ -43,7 +43,10 @@ MemorySimulator::MemorySimulator( int argc, char* argv[] )
   m_programs = NULL;
   m_numPrograms = 0;
 
+  m_memory = NULL;
+
   readPrograms( );
+  prepareMemory( );
 }
 
 MemorySimulator::~MemorySimulator( )
@@ -52,6 +55,8 @@ MemorySimulator::~MemorySimulator( )
   m_progTrace.close( );
 
   delete[] m_programs;
+
+  delete[] m_memory;
 }
 
 void MemorySimulator::readPrograms( )
@@ -77,6 +82,12 @@ void MemorySimulator::readPrograms( )
     else
       m_programs[i] = Program( num, m_programs[i-1].lastPage( ), numPages ); 
   }
+}
+
+void MemorySimulator::prepareMemory( )
+{
+  m_memory = new Page[m_frames];
+  
 }
 
 unsigned int MemorySimulator::lastPage( ) const

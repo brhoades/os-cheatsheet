@@ -30,6 +30,10 @@ class MemorySimulator
     void readPrograms( );
     void prepareMemory( );
 
+    void run( ); 
+
+    //void lru( unsigned int );
+
     unsigned int lastPage( ) const;
 
   private:

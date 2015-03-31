@@ -43,6 +43,8 @@ MemorySimulator::MemorySimulator( int argc, char* argv[] )
   m_programs = NULL;
   m_numPrograms = 0;
 
+  m_PC = 0;
+
   m_memory = NULL;
 
   readPrograms( );
@@ -88,11 +90,11 @@ void MemorySimulator::prepareMemory( )
 {
   m_memory = new Page[m_frames];
   
-  int memEach = floor( m_frames / m_numPrograms ); 
+  unsigned int memEach = floor( m_frames / m_numPrograms ); 
 
   for( unsigned int i=0; i<m_numPrograms; i++ )
   {
-    int size = 0;
+    unsigned int size = 0;
     if( m_programs[i].numPages( ) > memEach )
       size = memEach;
     else
@@ -100,12 +102,26 @@ void MemorySimulator::prepareMemory( )
     for( int j=0; j<size; j++ )
     {
       int num = i * memEach + j;
+
       m_memory[num].m_owner = i;
-      m_memory[num].update( ); 
       m_memory[num].m_used = true;
     }
   }
 }
+
+void MemorySimulator::run( ) 
+{
+  // Read in instructions and execute
+  while( !m_progTrace.eof( ) )
+  {
+    unsigned int progNum, word;
+
+    m_progTrace >> progNum >> word;
+
+    m_PC++;
+  }
+}
+
 
 unsigned int MemorySimulator::lastPage( ) const
 {

@@ -31,7 +31,6 @@ class MemorySimulator
     unsigned int lastPage( ) const;
 
   private:
-    string m_programName;
     unsigned int m_frames, m_rAlgo;
     bool m_pagePolicy;
 

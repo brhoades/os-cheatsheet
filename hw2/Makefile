@@ -30,6 +30,6 @@ clean:
 	-@rm -f driver > /dev/null 2>&1
 	-@rm -f $(OBJECTS) > /dev/null 2>&1
 
-memorysimulator.o: memorysimulator.cpp memorysimulator.h
+memorysimulator.o: memorysimulator.cpp memorysimulator.h program.o
 program.o: program.cpp program.h
 main.o: main.cpp

@@ -88,6 +88,19 @@ void MemorySimulator::prepareMemory( )
 {
   m_memory = new Page[m_frames];
   
+  int memEach = floor( m_frames / m_numPrograms ); 
+  int num = 0;
+
+  for( unsigned int i=0; i<m_numPrograms; i++ )
+  {
+    for( int j=0; j<memEach; j++ )
+    {
+      m_memory[num].m_owner = i;
+      m_memory[num].update( ); 
+      m_memory[num].m_used = true;
+      num++;
+    }
+  }
 }
 
 unsigned int MemorySimulator::lastPage( ) const

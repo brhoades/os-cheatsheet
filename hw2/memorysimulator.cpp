@@ -82,9 +82,9 @@ void MemorySimulator::readPrograms( )
     m_progList >> num >> numPages;
 
     if( i == 0 )
-      m_programs[i] = Program( num, 0, ceil( numPages / m_pageSize ) );
+      m_programs[i] = Program( num, 0, floor( numPages / m_pageSize ) );
     else
-      m_programs[i] = Program( num, m_programs[i-1].lastPage( ), ceil( numPages / m_pageSize ) ); 
+      m_programs[i] = Program( num, m_programs[i-1].lastPage( ), floor( numPages / m_pageSize ) ); 
   }
 }
 
@@ -102,8 +102,6 @@ void MemorySimulator::prepareMemory( )
     else
       size = m_programs[i].numPages( );
 
-    m_programs[i].m_mm_first = i * memEach;
-    m_programs[i].m_mm_last = (i+1) * memEach - 1;
     for( unsigned int j=0; j<size; j++ )
     {
       unsigned int num = i * memEach + j;
@@ -138,7 +136,7 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
   }
 
   // Adjust entries so the go to the right page for each size.
-  word = ceil( word / m_pageSize );
+  word = floor( word / m_pageSize );
 
   if( word > m_programs[num].numPages( ) )
   {
@@ -153,7 +151,7 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
   word += min;
 
   // Check if this page is in memory 
-  for( unsigned int i=m_programs[num].m_mm_first; i<m_programs[num].m_mm_last; i++ )
+  for( unsigned int i=0; i<m_frames; i++ )
   {
     if( m_memory[i].m_contents == word )
     {
@@ -200,7 +198,7 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
     case ALGO_LRU:
     {
       unsigned int min=m_memory[p.m_mm_first].m_accessed;
-      for( unsigned int i=p.m_mm_first+1; i<p.m_mm_last; i++ )
+      for( unsigned int i=0; i<m_frames; i++ )
       {
         if( m_memory[i].m_accessed < min )
         {
@@ -215,7 +213,7 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
     case ALGO_FIFO:
     {
       unsigned int min = m_memory[p.m_mm_first].m_loaded;
-      for( unsigned int i=p.m_mm_first+1; i<p.m_mm_last; i++ )
+      for( unsigned int i=0; i<m_frames; i++ )
       {
         if( m_memory[i].m_loaded < min )
         {
@@ -235,11 +233,17 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
   m_memory[sel].m_loaded = m_PC;
 
   // If prepaging is emabled and we won't write in someone else's memory
-  if( m_prepage && sel != p.m_mm_last )
+  if( m_prepage && sel+1 != m_frames )
   { 
     m_memory[sel+1] = word+1;
     m_memory[sel+1].update( m_PC );
     m_memory[sel+1].m_loaded = m_PC;
+  }
+  else if( m_prepage )
+  {
+    m_memory[0] = word+1;
+    m_memory[0].update( m_PC );
+    m_memory[0].m_loaded = m_PC;
   }
 }
 

@@ -13,8 +13,9 @@ class Page
 
     Page& operator=( unsigned int );
 
-    unsigned int m_owner, m_accessed, m_contents;
-    bool m_used;
+    unsigned int m_owner, m_accessed, m_contents, m_loaded;
+
+    bool m_clock;
 };
 
 

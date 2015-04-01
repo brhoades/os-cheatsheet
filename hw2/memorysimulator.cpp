@@ -43,6 +43,8 @@ MemorySimulator::MemorySimulator( int argc, char* argv[] )
   m_programs = NULL;
   m_numPrograms = 0;
 
+  m_pageFaults = 0;
+
   m_PC = 0;
 
   m_memory = NULL;
@@ -107,7 +109,7 @@ void MemorySimulator::prepareMemory( )
       unsigned int num = i * memEach + j;
 
       m_memory[num].m_owner = i;
-      m_memory[num].m_used = true;
+      m_memory[num].m_loaded = m_PC;
       m_memory[num].m_contents = m_programs[i].firstPage( ) + j;
     }
   }
@@ -136,7 +138,7 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
     throw domain_error( ss.str( ) );
   }
 
-  if( word < 0 || word > m_programs[num].numPages( ) )
+  if( word > m_programs[num].numPages( ) )
   {
     stringstream ss;
     ss << "Page #" << word << " for program #" << num << " does not exist (only has " << m_programs[num].numPages( ) << " pages)";
@@ -151,7 +153,7 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
   // Check if this page is in memory 
   for( unsigned int i=m_programs[num].m_mm_first; i<m_programs[num].m_mm_last; i++ )
   {
-    if( m_memory[i].m_used && m_memory[i].m_contents == word )
+    if( m_memory[i].m_contents == word )
     {
       m_memory[i].update( m_PC );
       return;
@@ -161,25 +163,68 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
   handleFault( m_programs[num], word );
 }
 
-void MemorySimulator::handleFault( const Program& p, unsigned int word )
+void MemorySimulator::handleFault( Program& p, unsigned int word )
 {
   m_pageFaults++;
 
+  unsigned int sel=p.m_mm_first;
+
   switch( m_rAlgo )
   {
-    //Swap out the first page with the lowest timestamp
+    // Rotate through memory and remove infrequently used memory first.
+    case ALGO_CLOCK:
+    {
+      while( true )
+      {
+        if( p.m_clockPointer > p.m_mm_last )
+          p.m_clockPointer = p.m_mm_first;  
+
+        if( m_memory[p.m_clockPointer].m_clock )
+          m_memory[p.m_clockPointer].m_clock = false;
+        else
+        {
+          sel = p.m_clockPointer;
+          break;
+        }
+
+        p.m_clockPointer++;
+      }
+
+      p.m_clockPointer++;
+      break; 
+    }
+
+    // Swap out the first page with the lowest timestamp
     case ALGO_LRU:
-      unsigned int min=m_memory[p.m_mm_first].m_accessed, first=p.m_mm_first;
+    {
+      unsigned int min=m_memory[p.m_mm_first].m_accessed;
       for( unsigned int i=p.m_mm_first+1; i<p.m_mm_last; i++ )
       {
         if( m_memory[i].m_accessed < min )
-          first = i;
+          sel = i;
       }
-
-      m_memory[first] = word;
-      m_memory[first].update( m_PC );
       break; 
+    }
+
+    // Choose the oldest loaded page and replace it
+    case ALGO_FIFO:
+    {
+      unsigned int min = m_memory[p.m_mm_first].m_loaded;
+      for( unsigned int i=p.m_mm_first+1; i<p.m_mm_last; i++ )
+      {
+        if( m_memory[i].m_loaded < min )
+          sel = i;
+
+        if( min == 0 )
+          break;
+      }
+      break; 
+    }
   }
+
+  m_memory[sel] = word;
+  m_memory[sel].update( m_PC );
+  m_memory[sel].m_loaded = m_PC;
 }
 
 unsigned int MemorySimulator::lastPage( ) const

@@ -20,6 +20,8 @@ class Program
     unsigned int num( ) const;
 
     unsigned int m_mm_first, m_mm_last; // where our pages are in main memory
+
+    unsigned int m_clockPointer;
   private:
     unsigned int m_num, m_numPages, m_firstPage;
 

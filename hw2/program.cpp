@@ -7,6 +7,8 @@ Program::Program( const unsigned int num, const unsigned pageNum, const unsigned
   m_num = num;
   m_numPages = numPages;
   m_firstPage = pageNum;
+
+  m_clockPointer = 0;
 }
 
 unsigned int Program::firstPage( ) const

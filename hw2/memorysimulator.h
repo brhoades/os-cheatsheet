@@ -33,7 +33,7 @@ class MemorySimulator
 
     void run( ); 
     void access( unsigned int, unsigned int );
-    void handleFault( const Program& p, unsigned int word );
+    void handleFault( Program& p, unsigned int word );
 
     //void lru( unsigned int );
 
@@ -49,7 +49,7 @@ class MemorySimulator
 
     Program* m_programs;
     Page* m_memory;
-    
+
     unsigned int m_numPrograms;
     unsigned int m_pageSize;
     unsigned int m_lastPage;

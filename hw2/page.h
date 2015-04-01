@@ -11,6 +11,8 @@ class Page
     Page( );
     void update( unsigned int PC );
 
+    Page& operator=( unsigned int );
+
     unsigned int m_owner, m_accessed, m_contents;
     bool m_used;
 };

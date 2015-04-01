@@ -9,5 +9,7 @@ int main( int argc, char* argv[] )
 
   sim.run( );
 
+  cout << "page faults: " << sim.pageFaults( ) << endl;
+
   return 0;
 }

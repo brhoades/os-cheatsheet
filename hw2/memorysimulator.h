@@ -39,6 +39,8 @@ class MemorySimulator
 
     unsigned int lastPage( ) const;
 
+    unsigned int pageFaults( ) const;
+
   private:
     unsigned int m_frames, m_rAlgo, m_PC, m_pageFaults;
     bool m_pagePolicy;

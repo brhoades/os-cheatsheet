@@ -176,7 +176,7 @@ void MemorySimulator::handleFault( const Program& p, unsigned int word )
           first = i;
       }
 
-      m_memory[first].m_contents = word;
+      m_memory[first] = word;
       m_memory[first].update( m_PC );
       break; 
   }
@@ -186,3 +186,9 @@ unsigned int MemorySimulator::lastPage( ) const
 {
   return m_lastPage;
 }
+
+unsigned int MemorySimulator::pageFaults( ) const
+{
+  return m_pageFaults;
+}
+

@@ -82,9 +82,9 @@ void MemorySimulator::readPrograms( )
     m_progList >> num >> numPages;
 
     if( i == 0 )
-      m_programs[i] = Program( num, 0, numPages );
+      m_programs[i] = Program( num, 0, ceil( numPages / m_pageSize ) );
     else
-      m_programs[i] = Program( num, m_programs[i-1].lastPage( ), numPages ); 
+      m_programs[i] = Program( num, m_programs[i-1].lastPage( ), ceil( numPages / m_pageSize ) ); 
   }
 }
 
@@ -137,6 +137,9 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
     throw domain_error( ss.str( ) );
   }
 
+  // Adjust entries so the go to the right page for each size.
+  word = ceil( word / m_pageSize );
+
   if( word > m_programs[num].numPages( ) )
   {
     stringstream ss;
@@ -144,7 +147,7 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
     throw domain_error( ss.str( ) ); 
   }
 
-  unsigned int min = m_programs[num].firstPage( ), max = m_programs[num].lastPage( );
+  unsigned int min = m_programs[num].firstPage( );
 
   // Convert word to absolute page number
   word += min;

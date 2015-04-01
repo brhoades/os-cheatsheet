@@ -109,7 +109,6 @@ void MemorySimulator::prepareMemory( )
       unsigned int num = i * memEach + j;
 
       m_memory[num].m_owner = i;
-      m_memory[num].m_loaded = m_PC;
       m_memory[num].m_contents = m_programs[i].firstPage( ) + j;
     }
   }
@@ -201,7 +200,10 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
       for( unsigned int i=p.m_mm_first+1; i<p.m_mm_last; i++ )
       {
         if( m_memory[i].m_accessed < min )
+        {
+          min = m_memory[i].m_accessed;
           sel = i;
+        }
       }
       break; 
     }
@@ -213,7 +215,10 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
       for( unsigned int i=p.m_mm_first+1; i<p.m_mm_last; i++ )
       {
         if( m_memory[i].m_loaded < min )
+        {
+          min = m_memory[i].m_loaded;
           sel = i;
+        }
 
         if( min == 0 )
           break;

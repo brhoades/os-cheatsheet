@@ -36,7 +36,7 @@ MemorySimulator::MemorySimulator( int argc, char* argv[] )
   else
     throw domain_error( "Unknown page replacement algorithm specified" );
 
-  m_pagePolicy = argv[5];
+  m_prepage = bool( atoi( argv[5] ) );
 
   m_frames = AVAILABLE_FRAMES / m_pageSize;
 
@@ -233,6 +233,14 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
   m_memory[sel] = word;
   m_memory[sel].update( m_PC );
   m_memory[sel].m_loaded = m_PC;
+
+  // If prepaging is emabled and we won't write in someone else's memory
+  if( m_prepage && sel != p.m_mm_last )
+  { 
+    m_memory[sel+1] = word+1;
+    m_memory[sel+1].update( m_PC );
+    m_memory[sel+1].m_loaded = m_PC;
+  }
 }
 
 unsigned int MemorySimulator::lastPage( ) const

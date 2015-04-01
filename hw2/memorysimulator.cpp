@@ -76,15 +76,18 @@ void MemorySimulator::readPrograms( )
   m_progList.clear( );
   m_progList.seekg( 0, ios::beg );
 
+  unsigned int pagecnt = 0;
+
   for( unsigned int i=0; i<m_numPrograms; i++ )
   {
     unsigned int num, numPages;  
     m_progList >> num >> numPages;
 
-    if( i == 0 )
-      m_programs[i] = Program( num, 0, floor( numPages / m_pageSize ) );
-    else
-      m_programs[i] = Program( num, m_programs[i-1].lastPage( ), floor( numPages / m_pageSize ) ); 
+    numPages /= m_pageSize;
+
+    m_programs[i] = Program( num, pagecnt, numPages );
+
+    pagecnt += numPages;
   }
 }
 

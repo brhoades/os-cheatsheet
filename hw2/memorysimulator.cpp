@@ -137,21 +137,17 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
     ss << "Program #" << num << " requesting word #" << word << " does not exist";
     throw domain_error( ss.str( ) );
   }
+  
+  // Convert relative to absolute page number
+  word = ( word / m_pageSize + m_programs[num].firstPage( ) );
 
-  // Adjust entries so the go to the right page for each size.
-  word = floor( word / m_pageSize );
-
-  if( word > m_programs[num].numPages( ) )
+  if( word < m_programs[num].firstPage( ) || word > m_programs[num].lastPage( ) )
   {
     stringstream ss;
-    ss << "Page #" << word << " for program #" << num << " does not exist (only has " << m_programs[num].numPages( ) << " pages)";
+    ss << "Page #" << word << " for program #" << num << " does not exist (only has " << m_programs[num].numPages( ) << " pages)" 
+        << " (" << m_programs[num].firstPage( ) << "-" << m_programs[num].lastPage( ) << ")";
     throw domain_error( ss.str( ) ); 
   }
-
-  unsigned int min = m_programs[num].firstPage( );
-
-  // Convert word to absolute page number
-  word += min;
 
   // Check if this page is in memory 
   for( unsigned int i=0; i<m_frames; i++ )
@@ -170,7 +166,7 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
 {
   m_pageFaults++;
 
-  unsigned int sel=p.m_mm_first;
+  unsigned int sel=0;
 
   switch( m_rAlgo )
   {
@@ -179,8 +175,8 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
     {
       while( true )
       {
-        if( p.m_clockPointer > p.m_mm_last )
-          p.m_clockPointer = p.m_mm_first;  
+        if( p.m_clockPointer > m_frames )
+          p.m_clockPointer = 0;  
 
         if( m_memory[p.m_clockPointer].m_clock )
           m_memory[p.m_clockPointer].m_clock = false;
@@ -200,7 +196,7 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
     // Swap out the first page with the lowest timestamp
     case ALGO_LRU:
     {
-      unsigned int min=m_memory[p.m_mm_first].m_accessed;
+      unsigned int min=m_memory[sel].m_accessed;
       for( unsigned int i=0; i<m_frames; i++ )
       {
         if( m_memory[i].m_accessed < min )
@@ -215,7 +211,7 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
     // Choose the oldest loaded page and replace it
     case ALGO_FIFO:
     {
-      unsigned int min = m_memory[p.m_mm_first].m_loaded;
+      unsigned int min = m_memory[sel].m_loaded;
       for( unsigned int i=0; i<m_frames; i++ )
       {
         if( m_memory[i].m_loaded < min )
@@ -235,7 +231,9 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
   m_memory[sel].update( m_PC );
   m_memory[sel].m_loaded = m_PC;
 
-  // If prepaging is emabled and we won't write in someone else's memory
+  if( word == p.lastPage( ) )
+    word = p.firstPage( );
+
   if( m_prepage && sel+1 != m_frames )
   { 
     m_memory[sel+1] = word+1;

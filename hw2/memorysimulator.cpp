@@ -117,6 +117,11 @@ void MemorySimulator::prepareMemory( )
 
 void MemorySimulator::run( ) 
 {
+
+  cout << "========================" << endl;
+  cout << "Page Size: " << m_pageSize << endl;
+  cout << "Replacement Algorithm: " << m_rAlgo << endl;
+  cout << "Paging Policy: " << m_prepage << endl;
   // Read in instructions and execute
   while( !m_progTrace.eof( ) )
   {

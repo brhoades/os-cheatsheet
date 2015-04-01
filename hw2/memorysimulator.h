@@ -33,6 +33,7 @@ class MemorySimulator
 
     void run( ); 
     void access( unsigned int, unsigned int );
+    void handleFault( const Program& p, unsigned int word );
 
     //void lru( unsigned int );
 

@@ -108,6 +108,7 @@ void MemorySimulator::prepareMemory( )
 
       m_memory[num].m_owner = i;
       m_memory[num].m_used = true;
+      m_memory[num].m_contents = m_programs[i].firstPage( ) + j;
     }
   }
 }
@@ -157,7 +158,28 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
     }
   }
 
+  handleFault( m_programs[num], word );
+}
+
+void MemorySimulator::handleFault( const Program& p, unsigned int word )
+{
   m_pageFaults++;
+
+  switch( m_rAlgo )
+  {
+    //Swap out the first page with the lowest timestamp
+    case ALGO_LRU:
+      unsigned int min=m_memory[p.m_mm_first].m_accessed, first=p.m_mm_first;
+      for( unsigned int i=p.m_mm_first+1; i<p.m_mm_last; i++ )
+      {
+        if( m_memory[i].m_accessed < min )
+          first = i;
+      }
+
+      m_memory[first].m_contents = word;
+      m_memory[first].update( m_PC );
+      break; 
+  }
 }
 
 unsigned int MemorySimulator::lastPage( ) const

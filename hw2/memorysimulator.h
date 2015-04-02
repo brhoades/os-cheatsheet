@@ -1,5 +1,3 @@
-#ifndef MEMORY_SIMULATOR_H
-#define MEMORY_SIMULATOR_H
 
 #include <iostream>
 #include <stdexcept>
@@ -35,8 +33,6 @@ class MemorySimulator
     void access( unsigned int, unsigned int );
     void handleFault( Program& p, unsigned int word );
 
-    //void lru( unsigned int );
-
     unsigned int lastPage( ) const;
 
     unsigned int pageFaults( ) const;
@@ -54,5 +50,3 @@ class MemorySimulator
     unsigned int m_pageSize;
     unsigned int m_lastPage;
 };
-
-#endif

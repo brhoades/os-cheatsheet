@@ -37,16 +37,12 @@ MemorySimulator::MemorySimulator( int argc, char* argv[] )
     throw domain_error( "Unknown page replacement algorithm specified" );
 
   m_prepage = bool( atoi( argv[5] ) );
-
   m_frames = AVAILABLE_FRAMES / m_pageSize;
 
   m_programs = NULL;
   m_numPrograms = 0;
-
   m_pageFaults = 0;
-
   m_PC = 0;
-
   m_memory = NULL;
 
   readPrograms( );

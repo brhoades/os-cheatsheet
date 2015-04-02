@@ -19,19 +19,19 @@ OBJECTS=memorysimulator.o \
 .cpp.o: $<
 	$(CXX) -c $(CFLAGS) -o $@ $<
 
-memorysimulator: $(OBJECTS)
+driver: $(OBJECTS)
 	$(CXX) $(CFLAGS) -o $@ $?
 
 default: all
 
-all: memorysimulator
+all: driver
 
 clean: 
 	-@rm -rf core > /dev/null 2>&1
 	-@rm -f driver > /dev/null 2>&1
 	-@rm -f $(OBJECTS) > /dev/null 2>&1
 
-memorysimulator.o: memorysimulator.cpp memorysimulator.h program.o page.o
+main.o: main.cpp
+memorysimulator.o: memorysimulator.cpp memorysimulator.h
 program.o: program.cpp program.h
 page.o: page.h page.cpp
-main.o: main.cpp memorysimulator.o 

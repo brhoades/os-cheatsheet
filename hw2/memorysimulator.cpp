@@ -175,7 +175,7 @@ void MemorySimulator::handleFault( Program& p, unsigned int word, bool prepage )
     {
       while( true )
       {
-        if( p.m_clockPointer > m_frames )
+        if( p.m_clockPointer >= m_frames )
           p.m_clockPointer = 0;  
 
         if( m_memory[p.m_clockPointer].m_clock )

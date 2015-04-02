@@ -10,7 +10,7 @@ Program::Program( const unsigned int num, const unsigned pageNum, const unsigned
 
   m_memory = new int[numPages];
 
-  for( int i=0; i<numPages; i++ )
+  for( unsigned int i=0; i<numPages; i++ )
     m_memory[i] = -1;
 
   m_clockPointer = 0;

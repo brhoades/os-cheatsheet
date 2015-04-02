@@ -160,13 +160,12 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
     }
   }
 
+  m_pageFaults++;
   handleFault( m_programs[num], word );
 }
 
-void MemorySimulator::handleFault( Program& p, unsigned int word )
+void MemorySimulator::handleFault( Program& p, unsigned int word, bool prepage )
 {
-  m_pageFaults++;
-
   unsigned int sel=0;
 
   switch( m_rAlgo )
@@ -232,20 +231,27 @@ void MemorySimulator::handleFault( Program& p, unsigned int word )
   m_memory[sel].update( m_PC );
   m_memory[sel].m_loaded = m_PC;
 
-  if( word == p.lastPage( ) )
-    word = p.firstPage( );
-
-  if( m_prepage && sel+1 != m_frames )
-  { 
-    m_memory[sel+1] = word+1;
-    m_memory[sel+1].update( m_PC );
-    m_memory[sel+1].m_loaded = m_PC;
-  }
-  else if( m_prepage )
+  // Choose a page based on this algo again if prepaging
+  // We flip this to false for a second call so we don't prepage forever
+  if( m_prepage && prepage )
   {
-    m_memory[0] = word+1;
-    m_memory[0].update( m_PC );
-    m_memory[0].m_loaded = m_PC;
+    if( word == p.lastPage( ) )
+      word = p.firstPage( );
+    else
+    {
+    }
+    word += 1;
+    // Is it in memory already?
+    for( unsigned int i=0; i<m_frames; i++ )
+    {
+      if( m_memory[i].m_contents == word )
+      {
+        m_memory[i].update( m_PC );
+        m_memory[i].m_loaded = m_PC;
+        return;
+      }
+    }
+    handleFault( p, word, false );
   }
 }
 

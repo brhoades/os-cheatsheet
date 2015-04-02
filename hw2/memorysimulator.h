@@ -31,7 +31,7 @@ class MemorySimulator
 
     void run( ); 
     void access( unsigned int, unsigned int );
-    void handleFault( Program& p, unsigned int word );
+    void handleFault( Program& p, unsigned int word, bool prepage=true );
 
     unsigned int lastPage( ) const;
 

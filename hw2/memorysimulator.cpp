@@ -42,6 +42,7 @@ MemorySimulator::MemorySimulator( int argc, char* argv[] )
   m_programs = NULL;
   m_numPrograms = 0;
   m_pageFaults = 0;
+  m_clockPointer = 0;
   m_PC = 0;
   m_memory = NULL;
 
@@ -193,21 +194,21 @@ void MemorySimulator::handleFault( Program* p, unsigned int word, bool prepage )
     {
       while( true )
       {
-        if( p->m_clockPointer >= m_frames )
-          p->m_clockPointer = 0;  
+        if( m_clockPointer >= m_frames )
+          m_clockPointer = 0;  
 
-        if( m_memory[p->m_clockPointer].m_clock )
-          m_memory[p->m_clockPointer].m_clock = false;
+        if( m_memory[m_clockPointer].m_clock )
+          m_memory[m_clockPointer].m_clock = false;
         else
         {
-          sel = p->m_clockPointer;
+          sel = m_clockPointer;
           break;
         }
 
-        p->m_clockPointer++;
+        m_clockPointer++;
       }
 
-      p->m_clockPointer++;
+      m_clockPointer++;
       break; 
     }
 

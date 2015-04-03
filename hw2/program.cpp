@@ -10,8 +10,6 @@ Program::Program( const unsigned int num, const unsigned pageNum, const unsigned
 
   for( unsigned int i=pageNum; i<pageNum+numPages; i++ )
     m_jump[i] = -1;
-
-  m_clockPointer = 0;
 }
 
 unsigned int Program::firstPage( ) const
@@ -40,7 +38,6 @@ Program& Program::operator=( const Program& rhs )
   m_numPages = rhs.numPages( );
   m_num = rhs.num( );
 
-  m_clockPointer = rhs.m_clockPointer;
   m_jump = rhs.m_jump;
 
   return *this;

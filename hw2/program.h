@@ -21,9 +21,6 @@ class Program
     unsigned int numPages( ) const;
     unsigned int num( ) const;
 
-    // Each program's individual clock pointer
-    unsigned int m_clockPointer;
-
     // lookup table, absolute page -> index in m_memory
     map<unsigned int,int> m_jump;
 

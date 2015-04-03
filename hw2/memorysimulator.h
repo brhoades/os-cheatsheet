@@ -39,7 +39,7 @@ class MemorySimulator
 
   private:
     unsigned long m_PC;
-    unsigned int m_frames, m_rAlgo, m_pageFaults;
+    unsigned int m_frames, m_rAlgo, m_pageFaults, m_clockPointer;
     bool m_prepage;
 
     fstream m_progList, m_progTrace;

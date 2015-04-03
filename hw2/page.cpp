@@ -14,7 +14,7 @@ Page::Page( unsigned int num ) : m_num( num )
   m_clock = false;
 }
 
-void Page::update( unsigned int word, unsigned int PC, Program* p )
+void Page::update( unsigned int word, unsigned long PC, Program* p )
 {
   if( m_owner != NULL )
   {
@@ -34,7 +34,7 @@ void Page::update( unsigned int word, unsigned int PC, Program* p )
   m_loaded = PC;
 }
 
-void Page::update( unsigned int PC )
+void Page::update( unsigned long PC )
 {
   m_accessed = PC;
   m_clock = true;

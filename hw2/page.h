@@ -16,12 +16,13 @@ class Page
     Page( );
     Page( unsigned int );
 
-    void update( unsigned int word, unsigned int PC, Program* p ); // Page has been loaded
-    void update( unsigned int PC ); // Page was read
+    void update( unsigned int word, unsigned long PC, Program* p ); // Page has been loaded
+    void update( unsigned long PC ); // Page was read
 
     Page& operator=( unsigned int );
 
-    unsigned int m_accessed, m_contents, m_loaded, m_num;
+    unsigned long m_accessed, m_contents, m_loaded;
+    unsigned int m_num;
     
     Program* m_owner;
 

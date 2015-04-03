@@ -38,7 +38,8 @@ class MemorySimulator
     unsigned int pageFaults( ) const;
 
   private:
-    unsigned int m_frames, m_rAlgo, m_PC, m_pageFaults;
+    unsigned long m_PC;
+    unsigned int m_frames, m_rAlgo, m_pageFaults;
     bool m_prepage;
 
     fstream m_progList, m_progTrace;

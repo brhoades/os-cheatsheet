@@ -112,8 +112,7 @@ void MemorySimulator::prepareMemory( )
       unsigned int mainmem = i*memEach + j;
       unsigned int virt = m_programs[i]->firstPage( ) + j;
 
-      // cout << "prog: " << i << "\tvirt: " << virt << " -> " << mainmem << endl;
-      m_memory[i].update( virt, m_PC, m_programs[i] );
+      m_memory[mainmem].update( virt, m_PC, m_programs[i] );
     }
   }
 }

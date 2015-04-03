@@ -116,7 +116,20 @@ void MemorySimulator::run( )
 
   cout << "========================" << endl;
   cout << "Page Size: " << m_pageSize << endl;
-  cout << "Replacement Algorithm: " << m_rAlgo << endl;
+  cout << "Replacement Algorithm: ";
+  switch( m_rAlgo )
+  {
+    case ALGO_CLOCK:
+      cout << "Clock" << endl; 
+      break;
+    case ALGO_FIFO:
+      cout << "FIFO" << endl;
+      break;
+    case ALGO_LRU:
+      cout << "LRU" << endl;
+      break;
+  }
+
   cout << "Paging Policy: " << m_prepage << endl;
   // Read in instructions and execute
   while( !m_progTrace.eof( ) )

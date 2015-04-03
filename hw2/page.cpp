@@ -2,14 +2,14 @@
 
 Page::Page( )
 {
-  m_loaded = m_num = m_accessed = m_contents = 0;
+  m_accessed = m_loaded = m_contents = 1;
   m_owner = NULL;
   m_clock = true;
 }
 
 Page::Page( unsigned int num ) : m_num( num )
 {
-  m_loaded = m_num = m_accessed = m_contents = 0;
+  m_loaded = m_accessed = m_contents = 1;
   m_owner = NULL;
   m_clock = true;
 }

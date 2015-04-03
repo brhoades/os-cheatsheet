@@ -93,6 +93,9 @@ void MemorySimulator::readPrograms( )
 void MemorySimulator::prepareMemory( )
 {
   m_memory = new Page[m_frames];
+
+  for( unsigned int i=0; i<m_frames; i++ )
+    m_memory[i].m_num = i;
   
   unsigned int memEach = m_frames / m_numPrograms; 
 
@@ -109,9 +112,8 @@ void MemorySimulator::prepareMemory( )
       unsigned int mainmem = i*memEach + j;
       unsigned int virt = m_programs[i]->firstPage( ) + j;
 
-      m_programs[i]->m_jump[virt] = mainmem;
       // cout << "prog: " << i << "\tvirt: " << virt << " -> " << mainmem << endl;
-      m_memory[mainmem] = virt;
+      m_memory[i].update( virt, m_PC, m_programs[i] );
     }
   }
 }
@@ -216,6 +218,9 @@ void MemorySimulator::handleFault( Program* p, unsigned int word, bool prepage )
       unsigned int min=m_memory[sel].m_accessed;
       for( unsigned int i=0; i<m_frames; i++ )
       {
+        if( min == 0 )
+          break;
+
         if( m_memory[i].m_accessed < min )
         {
           min = m_memory[i].m_accessed;
@@ -231,14 +236,14 @@ void MemorySimulator::handleFault( Program* p, unsigned int word, bool prepage )
       unsigned int min = m_memory[sel].m_loaded;
       for( unsigned int i=0; i<m_frames; i++ )
       {
+        if( min == 0 )
+          break;
+
         if( m_memory[i].m_loaded < min )
         {
           min = m_memory[i].m_loaded;
           sel = i;
         }
-
-        if( min == 0 )
-          break;
       }
       break; 
     }

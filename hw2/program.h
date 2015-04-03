@@ -2,6 +2,7 @@
 #define PROGRAM_H
 
 #include <cmath>
+#include <map>
 #include "page.h"
 
 using namespace std;
@@ -19,12 +20,12 @@ class Program
     unsigned int lastPage( ) const;
     unsigned int numPages( ) const;
     unsigned int num( ) const;
-    unsigned int m_mm_first, m_mm_last; // where our pages are in main memory
 
+    // Each program's individual clock pointer
     unsigned int m_clockPointer;
 
-    //lookup table
-    int* m_memory;
+    // lookup table, absolute page -> index in m_memory
+    map<unsigned int,int> m_jump;
 
     unsigned int m_num, m_numPages, m_firstPage;
 

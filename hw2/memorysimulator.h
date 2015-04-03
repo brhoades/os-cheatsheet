@@ -31,7 +31,7 @@ class MemorySimulator
 
     void run( ); 
     void access( unsigned int, unsigned int );
-    void handleFault( Program& p, unsigned int word, bool prepage=true );
+    void handleFault( Program* p, unsigned int word, bool prepage=true );
 
     unsigned int lastPage( ) const;
 
@@ -43,7 +43,7 @@ class MemorySimulator
 
     fstream m_progList, m_progTrace;
 
-    Program* m_programs;
+    Program** m_programs;
     Page* m_memory;
 
     unsigned int m_numPrograms;

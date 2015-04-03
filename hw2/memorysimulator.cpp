@@ -54,6 +54,9 @@ MemorySimulator::~MemorySimulator( )
   m_progList.close( );
   m_progTrace.close( );
 
+
+  for( unsigned int i=0; i<m_numPrograms; i++ )
+    delete m_programs[i];
   delete[] m_programs;
 
   delete[] m_memory;
@@ -67,7 +70,7 @@ void MemorySimulator::readPrograms( )
   while( getline( m_progList, trash ) ) 
     m_numPrograms++;
 
-  m_programs = new Program[m_numPrograms];
+  m_programs = new Program*[m_numPrograms];
 
   m_progList.clear( );
   m_progList.seekg( 0, ios::beg );
@@ -81,7 +84,7 @@ void MemorySimulator::readPrograms( )
 
     numPages /= m_pageSize;
 
-    m_programs[i] = Program( num, pagecnt, numPages );
+    m_programs[i] = new Program( num, pagecnt, numPages );
 
     pagecnt += numPages;
   }
@@ -96,14 +99,19 @@ void MemorySimulator::prepareMemory( )
   for( unsigned int i=0; i<m_numPrograms; i++ )
   {
     unsigned int size = 0;
-    if( m_programs[i].numPages( ) > memEach )
+    if( m_programs[i]->numPages( ) > memEach )
       size = memEach;
     else
-      size = m_programs[i].numPages( );
+      size = m_programs[i]->numPages( );
 
     for( unsigned int j=0; j<size; j++ )
     {
-      m_memory[i*memEach+j].m_contents = m_programs[i].firstPage( ) + j;
+      unsigned int mainmem = i*memEach + j;
+      unsigned int virt = m_programs[i]->firstPage( ) + j;
+
+      m_programs[i]->m_jump[virt] = mainmem;
+      // cout << "prog: " << i << "\tvirt: " << virt << " -> " << mainmem << endl;
+      m_memory[mainmem] = virt;
     }
   }
 }
@@ -150,31 +158,30 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
   }
   
   // Convert relative to absolute page number
-  word = word / m_pageSize + m_programs[num].firstPage( );
+  word = word / m_pageSize + m_programs[num]->firstPage( );
 
-  if( word < m_programs[num].firstPage( ) || word > m_programs[num].lastPage( ) )
+  if( word < m_programs[num]->firstPage( ) || word > m_programs[num]->lastPage( ) )
   {
     stringstream ss;
-    ss << "Page #" << word << " for program #" << num << " does not exist (only has " << m_programs[num].numPages( ) << " pages)" 
-        << " (" << m_programs[num].firstPage( ) << "-" << m_programs[num].lastPage( ) << ")";
+    ss << "Page #" << word << " for program #" << num << " does not exist (only has " << m_programs[num]->numPages( ) << " pages)" 
+        << " (" << m_programs[num]->firstPage( ) << "-" << m_programs[num]->lastPage( ) << ")";
     throw domain_error( ss.str( ) ); 
   }
 
-  // Check if this page is in memory 
-  for( unsigned int i=0; i<m_frames; i++ )
-  {
-    if( m_memory[i].m_contents == word )
-    {
-      m_memory[i].update( m_PC );
-      return;
-    }
-  }
 
-  m_pageFaults++;
-  handleFault( m_programs[num], word );
+  // cout << m_programs[num]->m_jump[word] << endl;
+  // cout << "For word: " << word << endl;
+  // Check if this page is in memory 
+  if( m_programs[num]->m_jump[word] == -1 )
+  {
+    m_pageFaults++;
+    handleFault( m_programs[num], word );
+  }
+  else
+    m_memory[m_programs[num]->m_jump[word]].update( m_PC );
 }
 
-void MemorySimulator::handleFault( Program& p, unsigned int word, bool prepage )
+void MemorySimulator::handleFault( Program* p, unsigned int word, bool prepage )
 {
   unsigned int sel=0;
 
@@ -185,21 +192,21 @@ void MemorySimulator::handleFault( Program& p, unsigned int word, bool prepage )
     {
       while( true )
       {
-        if( p.m_clockPointer >= m_frames )
-          p.m_clockPointer = 0;  
+        if( p->m_clockPointer >= m_frames )
+          p->m_clockPointer = 0;  
 
-        if( m_memory[p.m_clockPointer].m_clock )
-          m_memory[p.m_clockPointer].m_clock = false;
+        if( m_memory[p->m_clockPointer].m_clock )
+          m_memory[p->m_clockPointer].m_clock = false;
         else
         {
-          sel = p.m_clockPointer;
+          sel = p->m_clockPointer;
           break;
         }
 
-        p.m_clockPointer++;
+        p->m_clockPointer++;
       }
 
-      p.m_clockPointer++;
+      p->m_clockPointer++;
       break; 
     }
 
@@ -237,30 +244,20 @@ void MemorySimulator::handleFault( Program& p, unsigned int word, bool prepage )
     }
   }
 
-  m_memory[sel] = word;
-  m_memory[sel].update( m_PC );
-  m_memory[sel].m_loaded = m_PC;
+  m_memory[sel].update( word, m_PC, p );
 
   // Choose a page based on this algo again if prepaging
   // We flip this to false for a second call so we don't prepage forever
   if( m_prepage && prepage )
   {
-    if( word == p.lastPage( ) )
-      word = p.firstPage( );
+    if( word == p->lastPage( ) )
+      word = p->firstPage( );
     else
-    {
-    }
-    word += 1;
+      word += 1;
+
     // Is it in memory already?
-    for( unsigned int i=0; i<m_frames; i++ )
-    {
-      if( m_memory[i].m_contents == word )
-      {
-        m_memory[i].update( m_PC );
-        m_memory[i].m_loaded = m_PC;
-        return;
-      }
-    }
+    if( p->m_jump[word] != -1 )
+      return;
     handleFault( p, word, false );
   }
 }

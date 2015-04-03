@@ -103,10 +103,7 @@ void MemorySimulator::prepareMemory( )
 
     for( unsigned int j=0; j<size; j++ )
     {
-      unsigned int num = i * memEach + j;
-
-      m_memory[num].m_owner = i;
-      m_memory[num].m_contents = m_programs[i].firstPage( ) + j;
+      m_memory[i*memEach+j].m_contents = m_programs[i].firstPage( ) + j;
     }
   }
 }

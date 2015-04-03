@@ -13,7 +13,7 @@ class Page
 
     Page& operator=( unsigned int );
 
-    unsigned int m_owner, m_accessed, m_contents, m_loaded;
+    unsigned int m_accessed, m_contents, m_loaded;
 
     bool m_clock;
 };

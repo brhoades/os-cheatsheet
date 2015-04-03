@@ -2,7 +2,7 @@
 
 Page::Page( )
 {
-  m_loaded = m_owner = m_accessed = m_contents = 0;
+  m_loaded = m_accessed = m_contents = 0;
   m_clock = true;
 }
 

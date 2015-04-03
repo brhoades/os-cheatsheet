@@ -4,14 +4,14 @@ Page::Page( )
 {
   m_accessed = m_loaded = m_contents = 1;
   m_owner = NULL;
-  m_clock = true;
+  m_clock = false;
 }
 
 Page::Page( unsigned int num ) : m_num( num )
 {
   m_loaded = m_accessed = m_contents = 1;
   m_owner = NULL;
-  m_clock = true;
+  m_clock = false;
 }
 
 void Page::update( unsigned int word, unsigned int PC, Program* p )

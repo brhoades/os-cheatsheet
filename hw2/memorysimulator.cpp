@@ -91,7 +91,7 @@ void MemorySimulator::prepareMemory( )
 {
   m_memory = new Page[m_frames];
   
-  unsigned int memEach = floor( m_frames / m_numPrograms ); 
+  unsigned int memEach = m_frames / m_numPrograms; 
 
   for( unsigned int i=0; i<m_numPrograms; i++ )
   {
@@ -153,7 +153,7 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
   }
   
   // Convert relative to absolute page number
-  word = ( word / m_pageSize + m_programs[num].firstPage( ) );
+  word = word / m_pageSize + m_programs[num].firstPage( );
 
   if( word < m_programs[num].firstPage( ) || word > m_programs[num].lastPage( ) )
   {

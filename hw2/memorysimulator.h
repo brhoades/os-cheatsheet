@@ -4,6 +4,9 @@
  * Class:      CS5201
  * Assignment: 2
  * File:       memorysimulator.h
+
+  Our main memory simulator class. This class delegates and handles all functions and is run
+  with run( ). It requires all arguments passed into the program upon construction. 
  ******************************************/
 #include <iostream>
 #include <stdexcept>
@@ -32,12 +35,7 @@ class MemorySimulator
     MemorySimulator( int, char* argv[] );
     ~MemorySimulator( );
 
-    void readPrograms( );
-    void prepareMemory( );
-
     void run( ); 
-    void access( unsigned int, unsigned int );
-    void handleFault( Program* p, unsigned int word, bool prepage=true );
 
     unsigned int lastPage( ) const;
 
@@ -56,4 +54,10 @@ class MemorySimulator
     unsigned int m_numPrograms;
     unsigned int m_pageSize;
     unsigned int m_lastPage;
+
+    void readPrograms( );
+    void prepareMemory( );
+
+    void access( unsigned int, unsigned int );
+    void handleFault( Program* p, unsigned int word, bool prepage=true );
 };

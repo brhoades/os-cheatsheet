@@ -6,7 +6,8 @@
  * File:       memorysimulator.h
 
   Our main memory simulator class. This class delegates and handles all functions and is run
-  with run( ). It requires all arguments passed into the program upon construction. 
+  with run( ). It requires all arguments passed into the program upon construction
+  and error checks them. After construction, call run( ). 
  ******************************************/
 #include <iostream>
 #include <stdexcept>

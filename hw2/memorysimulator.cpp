@@ -146,6 +146,7 @@ void MemorySimulator::run( )
 
   cout << "Paging Policy: " << ( m_prepage ? "Prepaging" : "Ondemand" ) << endl;
   // Read in instructions and execute
+
   while( !m_progTrace.eof( ) )
   {
     unsigned int progNum, word;
@@ -155,6 +156,10 @@ void MemorySimulator::run( )
 
     access( progNum, word );
   }
+
+  cout << "Total Page Faults: " << pageFaults( ) << endl;
+  cout << "========================" << endl;
+
 }
 
 void MemorySimulator::access( unsigned int num, unsigned int word )

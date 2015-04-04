@@ -16,16 +16,10 @@ class Program
 
     Program& operator=( const Program& );
 
-    unsigned int firstPage( ) const;
-    unsigned int lastPage( ) const;
-    unsigned int numPages( ) const;
-    unsigned int num( ) const;
-
     // lookup table, absolute page -> index in m_memory
     map<unsigned int,int> m_jump;
 
     unsigned int m_num, m_numPages, m_firstPage;
-
 };
 
 #endif

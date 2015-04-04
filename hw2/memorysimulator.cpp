@@ -103,15 +103,15 @@ void MemorySimulator::prepareMemory( )
   for( unsigned int i=0; i<m_numPrograms; i++ )
   {
     unsigned int size = 0;
-    if( m_programs[i]->numPages( ) > memEach )
+    if( m_programs[i]->m_numPages > memEach )
       size = memEach;
     else
-      size = m_programs[i]->numPages( );
+      size = m_programs[i]->m_numPages;
 
     for( unsigned int j=0; j<size; j++ )
     {
       unsigned int mainmem = i*memEach + j;
-      unsigned int virt = m_programs[i]->firstPage( ) + j;
+      unsigned int virt = m_programs[i]->m_firstPage + j;
 
       m_memory[mainmem].update( virt, m_PC, m_programs[i] );
     }
@@ -160,19 +160,17 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
   }
   
   // Convert relative to absolute page number
-  word = word / m_pageSize + m_programs[num]->firstPage( );
+  word = word / m_pageSize + m_programs[num]->m_firstPage;
 
-  if( word < m_programs[num]->firstPage( ) || word > m_programs[num]->lastPage( ) )
+  if( word < m_programs[num]->m_firstPage || word > m_programs[num]->m_firstPage + m_programs[num]->m_numPages )
   {
     stringstream ss;
-    ss << "Page #" << word << " for program #" << num << " does not exist (only has " << m_programs[num]->numPages( ) << " pages)" 
-        << " (" << m_programs[num]->firstPage( ) << "-" << m_programs[num]->lastPage( ) << ")";
+    ss << "Page #" << word << " for program #" << num << " does not exist (only has " << m_programs[num]->m_numPages << " pages)" 
+        << " (" << m_programs[num]->m_numPages << "-" << m_programs[num]->m_firstPage+m_programs[num]->m_numPages << ")";
     throw domain_error( ss.str( ) ); 
   }
 
 
-  // cout << m_programs[num]->m_jump[word] << endl;
-  // cout << "For word: " << word << endl;
   // Check if this page is in memory 
   if( m_programs[num]->m_jump[word] == -1 )
   {
@@ -255,8 +253,8 @@ void MemorySimulator::handleFault( Program* p, unsigned int word, bool prepage )
   // We flip this to false for a second call so we don't prepage forever
   if( m_prepage && prepage )
   {
-    if( word == p->lastPage( ) )
-      word = p->firstPage( );
+    if( word == p->m_numPages + p->m_firstPage )
+      word = p->m_firstPage;
     else
       word += 1;
 

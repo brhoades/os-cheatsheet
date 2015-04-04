@@ -19,7 +19,6 @@ void Page::update( unsigned int word, unsigned long PC, Program* p )
   if( m_owner != NULL )
   {
     // remove ourself from our old owner's jump table
-    // cerr << "old owner: " << m_owner->num( ) << "\tcon: " << m_contents << " -> " << m_owner->m_jump[m_contents] << endl;
     m_owner->m_jump[m_contents] = -1;
   }
 
@@ -27,7 +26,6 @@ void Page::update( unsigned int word, unsigned long PC, Program* p )
   m_owner = p;
 
   p->m_jump[m_contents] = m_num;
-  //cerr << "new owner: " << m_owner->num( ) << "\tcon: " << m_contents << " -> " << m_owner->m_jump[m_contents] << endl;
 
   m_clock = true;
   m_accessed = PC;

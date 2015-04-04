@@ -7,6 +7,9 @@
  ******************************************/
 #include "memorysimulator.h"
 
+//PRE: Argv should be filled with all 6 parameters specified in this header file. They should all match the
+//     the exception descriptions below.
+//POST: readMemory( ) and preparePrograms( ) are loaded. All internal variables match appropriate passed values. 
 MemorySimulator::MemorySimulator( int argc, char* argv[] )
 {
   if( argc < 6 )
@@ -57,6 +60,8 @@ MemorySimulator::MemorySimulator( int argc, char* argv[] )
   prepareMemory( );
 }
 
+//PRE: None
+//POST: both file handles are closed, m_programs and m_memory are deleted.
 MemorySimulator::~MemorySimulator( )
 {
   m_progList.close( );
@@ -70,6 +75,8 @@ MemorySimulator::~MemorySimulator( )
   delete[] m_memory;
 }
 
+//PRE: constructor has been run and its requirements applied.
+//POST: m_programs are initialized with proper programs.
 void MemorySimulator::readPrograms( )
 {
   string trash;
@@ -98,6 +105,8 @@ void MemorySimulator::readPrograms( )
   }
 }
 
+//PRE: the constructor has been run with its checks.
+//POST: m_memory is initalized with pages of appropriate values.
 void MemorySimulator::prepareMemory( )
 {
   m_memory = new Page[m_frames];
@@ -125,6 +134,9 @@ void MemorySimulator::prepareMemory( )
   }
 }
 
+//PRE: The constructor and its checks have been run.
+//POST: the simulation has been run with m_pageFaults and m_PC set to proper values. all instructions
+//      in the program trace file are executed.
 void MemorySimulator::run( ) 
 {
 
@@ -162,6 +174,8 @@ void MemorySimulator::run( )
 
 }
 
+//PRE: num is a num in m_programs or domain error is thrown. word belongs to m_program[num]
+//POST: page faults are handled if needed, otherwise the page has its values updated.
 void MemorySimulator::access( unsigned int num, unsigned int word )
 {
   if( num >= m_numPrograms )
@@ -193,6 +207,9 @@ void MemorySimulator::access( unsigned int num, unsigned int word )
     m_memory[m_programs[num]->m_jump[word]].update( m_PC );
 }
 
+//PRE: p is a valid program, word is a word of p, prepage is set if first call, otherwise false so we don't infinitely 
+//     prepage.
+//POST: a new page is loaded into memory and jump tables updated.
 void MemorySimulator::handleFault( Program* p, unsigned int word, bool prepage )
 {
   unsigned int sel=0;
@@ -277,6 +294,8 @@ void MemorySimulator::handleFault( Program* p, unsigned int word, bool prepage )
   }
 }
 
+//PRE: None
+//POST: returns the number of page faults found in the simulation.
 unsigned int MemorySimulator::pageFaults( ) const
 {
   return m_pageFaults;

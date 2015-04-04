@@ -4,6 +4,9 @@
  * Class:      CS5201
  * Assignment: 2 
  * File:       program.h
+   Program is stored in m_programs in memorysimulator. It holds information about
+   an individual program loaded in from memorylist. Most pages will point to a program
+   which in turn has a jump table which will point back to a page index.
  ******************************************/
 #ifndef PROGRAM_H 
 #define PROGRAM_H

@@ -1,3 +1,10 @@
+/*******************************************
+ * Student:    Billy J Rhoades II
+ * Username:   bjrq48
+ * Class:      CS5201
+ * Assignment: 2 
+ * File:       program.cpp
+ ******************************************/
 #include "program.h"
 
 Program::Program( ) { }

@@ -1,3 +1,10 @@
+/*******************************************
+ * Student:    Billy J Rhoades II
+ * Username:   bjrq48
+ * Class:      CS5201
+ * Assignment: 2 
+ * File:       program.h
+ ******************************************/
 #ifndef PROGRAM_H 
 #define PROGRAM_H
 
@@ -19,6 +26,7 @@ class Program
     // lookup table, absolute page -> index in m_memory
     map<unsigned int,int> m_jump;
 
+    // our number of pages, our number in the program list, and out first page
     unsigned int m_num, m_numPages, m_firstPage;
 };
 

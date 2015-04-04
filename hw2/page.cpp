@@ -1,3 +1,10 @@
+/*******************************************
+ * Student:    Billy J Rhoades II
+ * Username:   bjrq48
+ * Class:      CS5201
+ * Assignment: 2 
+ * File:       page.cpp
+ ******************************************/
 #include "page.h"
 
 Page::Page( )

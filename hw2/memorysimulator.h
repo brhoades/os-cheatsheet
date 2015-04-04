@@ -38,8 +38,6 @@ class MemorySimulator
 
     void run( ); 
 
-    unsigned int lastPage( ) const;
-
     unsigned int pageFaults( ) const;
 
   private:
@@ -54,7 +52,6 @@ class MemorySimulator
 
     unsigned int m_numPrograms;
     unsigned int m_pageSize;
-    unsigned int m_lastPage;
 
     void readPrograms( );
     void prepareMemory( );

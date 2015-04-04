@@ -277,11 +277,6 @@ void MemorySimulator::handleFault( Program* p, unsigned int word, bool prepage )
   }
 }
 
-unsigned int MemorySimulator::lastPage( ) const
-{
-  return m_lastPage;
-}
-
 unsigned int MemorySimulator::pageFaults( ) const
 {
   return m_pageFaults;

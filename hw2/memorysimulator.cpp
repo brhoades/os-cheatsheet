@@ -144,7 +144,7 @@ void MemorySimulator::run( )
       break;
   }
 
-  cout << "Paging Policy: " << m_prepage << endl;
+  cout << "Paging Policy: " << ( m_prepage ? "Prepaging" : "Ondemand" ) << endl;
   // Read in instructions and execute
   while( !m_progTrace.eof( ) )
   {

@@ -210,14 +210,45 @@
         \item Preemptive schemes (RR) are costly to implement with a single queue approach.
       \end{itemize}
      \subsection{Real-time systems}
-      \begin{itemize}
-        \item Tasks or processes attempt to control/react to events which must keep up.
-        \item Correctness depends on both result AND time at delivery
-        \item \textbf{Hard real-time task}: must meet the deadline, causes catastrophic failure/errors w/o.
-        \item \textbf{Soft real-time task}: has a deadline that is desired. Makes sense to complete even if late.
-        \item \textbf{Periodic tasks}: Only one unit per period T, exactly T apart.
-        \item \textbf{Aperiodic task}: has a deadline by which it must finish/start, may have constraints both.
-      \end{itemize}
+       \begin{itemize}
+         \item Tasks or processes attempt to control/react to events which must keep up.
+         \item Correctness depends on both result AND time at delivery.
+         \item Critical that the system is reliable, sometimes with failsafe (traffic lights).
+         \item Sometimes include small size, fast context switches, prioritization of scheduling, and special alarms/timeouts.
+         \item \textbf{Hard real-time task}: must meet the deadline, causes catastrophic failure/errors w/o.
+         \item \textbf{Soft real-time task}: has a deadline that is desired. Makes sense to complete even if late.
+         \item \textbf{Periodic tasks}: Only one unit per period T, exactly T apart.
+         \item \textbf{Aperiodic task}: has a deadline by which it must finish/start/both.
+       \end{itemize}
+      \subsection{Deadline scheduling}
+        \begin{itemize}
+          \item Real time application, not concerned with fairness/response time but with prioritizing tasks based on deadlines.
+          \item Earliest deadlines typically scheduled first.
+          % there's 2 example slides here, slide 13/14 on chap10.
+          \item Best to know each first:
+          \begin{itemize}
+            \item Ready time (periodic tasks know this)
+            \item Starting/completion deadline
+            \item Processing time and resource reqs.
+            \item Priority
+           \end{itemize}
+        \end{itemize}
+      \subsection{Rate Monotonic Scheduling}
+        \begin{itemize}
+          \item Assigns priorities to tasks on basis of periods.
+          \item Highest priority tasks have the shortest period.
+          \item Always works if the below is satisfied:\\
+          $\frac{C_1}{T_1} + \frac{C_2}{T_2} + \dots + \frac{C_n}{T_n} \le n(2^{\frac{1}{n}}-1)$
+          \item Has industrial applications.
+          \item Higher priority tasks have higher frequencies (hz)
+          \item n is the number of tasks, C is cycle time T is processing time?
+        \end{itemize}
+        % Unix SVR scheduling skipped
+  \section{next}
+
+
+
+      
 
 
 

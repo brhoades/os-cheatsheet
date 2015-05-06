@@ -409,7 +409,39 @@
         \item \textbf{Prepaging}: bring more pages in than needed, ones that follow.
       \end{itemize}
 
-    \subsection{OS Related Questions}
+    \subsection{Sockets}
+      \begin{itemize}
+        %Several stupid questions at the beginning skipped
+        \item The second argument to listen(sock,\#) determines wait queue size, not max.
+        \item Fat client models DO take advantage of desktop power (they ARE desktops).
+        \item All of the following socket commands descriptors return -1 on failure.
+        \item socket( ~, SOCKET\_STREAM, 0 ). Creates TCP socket and rets. descriptor.
+        \item bind( sd, <struct cast madness>, len ). Binds the definition of a socket to a port \#.
+        \item socket( \~, SOCKET\_SOCK\_DGRAM, 0 ). Creates a UDP socket and rets. descriptor.
+        \item accept( sd, <cast madness>, len ). Blocks until client connection received, returns descriptor when it happens.
+      \end{itemize}
+    
+    \subsection{Scheduling and Processing}
+      \begin{itemize}
+        \item Direct goals of proc. schedulers: improve response time, throughput, TAT, efficiency
+      \end{itemize}
+
+    
+    
+    \subsection{Security and Triumph of the Nerds}
+      \begin{itemize}
+        \item Most antivirus software uses emulation / heuristics.
+        \item Logic bombs, trojan horses, and viruses require a host program to operate.
+        \item ``Bots'' attack require: attack software, many vulnerable machines, and locating those machines.
+      \end{itemize}
+     
+     
+     \subsection{Weird Questions}
+       \begin{itemize}
+         \item RAID \#'s: 1, mirror; 0, merge drives (splits data even); 10|2, striping, error detection, and fault tolerance (common).
+       \end{itemize}
+
+
 
 
   \end{multicols}

@@ -244,7 +244,69 @@
           \item n is the number of tasks, C is cycle time T is processing time?
         \end{itemize}
         % Unix SVR scheduling skipped
-  \section{next}
+  \section{Networking}
+    \subsection{Internet Protocol}
+      \begin{itemize}
+        \item Uniform method for host addresses, each host getting a unique one.
+        \item Provides packet delivery mechanisms (\textbf{Packet}: standard transfer unit), packets having a header with destination and size and a payload.
+        \item ISO Open Systems Interconnect Model has 7 layers. From top to bottom: Application, presentation, session, transport, network, data link, physical.
+        \item ISO OSI is a framework for specific protocols (FTP/RPC/TCP).
+      \end{itemize}
+     \subsection{Low Level Protocols}
+       \begin{itemize}
+         \item Physical layer is the signaling tech--- all hardware.
+         \item Data link layer, frame management. MAC addresses, form of hexadecimal letters X XX:XX:XX:XX:XX:XX, 6 pairs.
+         \item Broadcasts are on 6 pairs of FF.
+         \item Examples are wireless, Ethernet, and X.25.
+         \item These addresses are 48 bit.
+         \item Hosts send bits to other hosts in \textbf{frames}.
+         \item Hubs take one frame and send it to every other port.
+       \end{itemize}
+     \subsection{OSI Layers (cont)}
+       \begin{itemize}
+         \item Network layer
+         \begin{itemize}
+           \item Combines networks using IP. 
+           \item Performs packet routing across \textbf{gateways}, intermediate hosts.
+         \end{itemize}
+         \item Transport Layer
+         \begin{itemize}
+           \item TCP makes conns. on network w/ sockets, using IP/ports.
+           \item Keeps track of order of packet delivery.
+           \item Ensures all data arrives at destination in order (ACK/SYN).
+           \item Two basic protocols: TCP and UDP.
+           \item TCP is transmission control protocol, which is stream-oriented. Unduplicated and reliable.
+           \item UDP is user datagram protocol which gives no guarantee of delivery or duplication. (more efficient)
+           % graphic on header structure. TCP has tons of stuff including what sort of packet (ACK/SYN/etc) while UDP has a payload, checksum, and dest/port.
+         \end{itemize}
+          \item Presentation Layer: converts local representations of data into its canonical form.
+          \item Application layer: provides network services to end users, FTP clients, telnet, SMTP.
+        \end{itemize}
+     \subsection{Domain Name System}
+       \begin{itemize}
+         \item Translates symbolic hostnames into IP addresses
+         \item Hierarchical, distributed naming system for things on the internet
+         \item IP uses 32-bit address (4 sets of \#s, 0-255)
+         \item Each (sub)domain has 1+ \textbf{authoratative} DNS servers that public info to name servers.
+         \item DNS server maintains list of resolutions.
+       \end{itemize}
+      
+      \subsection{Sockets}
+        \begin{itemize}
+          \item BSD sockets enable communication between client/server.
+          \item Semantics resemble pipes (files), bidirectional.
+          \item Once one is created it can be bound to a port.
+          \item A server assigns an address to its socket + tells all potential clients.
+          \item Servers are passive and always waiting for clients to do something.
+          \item A client obtains correct socket address of any server.
+          \item Clients are active and run automatically deciding when to use a server.
+          \item Low level ports reserved for OS.
+          \item Each port can be bound to an address and used by an application.
+        \end{itemize}
+
+
+
+
 
 
 

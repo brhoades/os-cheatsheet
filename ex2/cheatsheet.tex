@@ -88,7 +88,7 @@
         \begin{itemize}
           \item Memory is divided into partitions which are assigned on demand. These can be equal or variable-sized.
           \item Inefficient, any program, no matter how small, occupies and entire partition.  
-          \item \textbf{Strategies}: Equal-sized requires no strategy. Unequal typicall assigns each process to the smallest partition which it can fit,
+          \item \textbf{Strategies}: Equal-sized requires no strategy. Unequal typically assigns each process to the smallest partition which it can fit,
                 wasting the least amount of memory.
           \item \textbf{Partition Assignment}: Can give each partition a queue or have a main queue for the entire memory for processes to wait.
         \end{itemize}
@@ -96,16 +96,17 @@
         \begin{itemize}
           \item Processes are allocated exactly as much memory as required.
           \item Eventually holes start appearing in memory (unallocated bits when processes finish).
-          \item \textbf{External Fragmentation}: Chunks of unallocated memory left from processes finishing.
-          \item Must use \textbf{compation} to shift processes so they are contiguous and free memory is in one block.
+          \item \textbf{External Fragmentation}: Chunks of unallocated memory left from processes finishing. When all over, processes can't find space.
+          \item \textbf{Internal Fragmentation}: With fixed page sizes, the last page of a program that can be partially filled.
+          \item Must use \textbf{compaction} to shift processes so they are contiguous and free memory is in one block.
         \end{itemize}
         \subsection{Strategies for Dynamic Partitioning}
         \begin{itemize}
           \item \textbf{First-fit}: fastest, however can have many processes allocated at front end that must be searched over
-                while searching for a new block.
-          \item \textbf{Best-fit}: Worst performer, chooses block that is closest in size to request. Causes more compation to be
+                while searching for a new block. Looks for the first block of memory that fit.
+          \item \textbf{Best-fit}: Worst performer, chooses block that is closest in size to request. Causes more computation to be
                 required as external fragments are the smallest too.
-          \item \textbf{Next-fit}: Like first fit, but searches for free blocks beyond the last allocated block. Results in event distribution of free block
+          \item \textbf{Next-fit}: Like first fit, but searches for free blocks beyond the last (time) allocated block. Results in event distribution of free block
                 in memory.
         \end{itemize}
         \subsection{Methods - Buddy System}
@@ -114,6 +115,7 @@
           the entire block of $2^{u}$ is allocated.
           \item Otherwise, split into two equal buddies.
           \item Splitting continues until smallest block $\geq$ s is generated.
+          \item Data structure resembles a binary tree.
           % If this is on the test, slide 10 of chap7 has an example that looks decent...
           % http://i.brod.es/dpaEb.png
          \end{itemize}
@@ -357,24 +359,56 @@
       \end{itemize}
     \subsection{Exam 2}
       \begin{itemize}
-         \item \textbf{Base Address}: an address that is used as the origin in the calculation of addresses in the execution of a computer program
-         \item \textbf{Dynamic Relocation}: a process that assigns new absolute addresses to a computer program during execution so that the program may be executed from a different area of main storage
-         \item \textbf{Indexed Sequential Access}: pertaining to the organization and accessing of the records of a storage structure through an index of the keys that are stored in arbitrarily partitioned sequential files
+         \item \textbf{Base Address}: an address that is used as the origin in the calculation of addresses in the execution of a computer program.
+         \item \textbf{Dynamic Relocation}: a process that assigns new absolute addresses to a computer program during execution so that the program may be executed from a different area of main storage.
+         \item \textbf{Indexed Sequential Access}: pertaining to the organization and accessing of the records of a storage structure through an index of the keys that are stored in arbitrarily partitioned sequential files.
          \item \textbf{Logical Address}: a reference to a memory location independent of the current assignment of data to memory.  A translation must be made to a physical address before the memory access can be achieved.
-         \item \textbf{Page}: in virtual storage, a fixed length block that has a virtual address and that is transferred as a unit between main memory and secondary memory
+         \item \textbf{Page}: in virtual storage, a fixed length block that has a virtual address and that is transferred as a unit between main memory and secondary memory.
          \item \textbf{Page Fault}: occurs when the page containing a referenced word is not in main memory.  This causes an interrupt and requires that the proper page be brought into main memory.
-         \item \textbf{Paging}: the transfer of pages between main memory and secondary memory
-         \item \textbf{Physical Address}: the absolute location of a unit of data in memory (e.g., word or byte in main memory, block on secondary memory)
-         \item \textbf{Sequential Access}: the capability to enter data into a storage device or a data medium in the same sequence as the data are ordered or to obtain data in the same order as they were entered
-         \item \textbf{Sequential File}: a file in which records are ordered according to the values of one or more key fields and processed in the same sequence from the beginning of the file
-         \item \textbf{Spooling}: the use of secondary memory as buffer storage to reduce processing delays when transferring data between peripheral equipment and the processors of a computer
+         \item \textbf{Paging}: the transfer of pages between main memory and secondary memory.
+         \item \textbf{Physical Address}: the absolute location of a unit of data in memory (e.g., word or byte in main memory, block on secondary memory).
+         \item \textbf{Sequential Access}: the capability to enter data into a storage device or a data medium in the same sequence as the data are ordered or to obtain data in the same order as they were entered.
+         \item \textbf{Sequential File}: a file in which records are ordered according to the values of one or more key fields and processed in the same sequence from the beginning of the file.
+         \item \textbf{Spooling}: the use of secondary memory as buffer storage to reduce processing delays when transferring data between peripheral equipment and the processors of a computer.
          \item \textbf{Trojan Horse}: secret undocumented routine embedded within a useful program.  Execution of the program results in execution of the secret routine.
-         \item \textbf{Virtual Address}: the address of a storage location in virtual storage 
+         \item \textbf{Virtual Address}: the address of a storage location in virtual storage.
       \end{itemize}
     
     
   \section{QA Pool}
-    \subsection{T/F - Process Dynamics}
+    \subsection{Memory Management}
+      \begin{itemize}
+        \item \textbf{Page fault trap} interrupt is created when a desired page frame isn't in RAM.
+        \item \textbf{Valid bit} is set in the page table when it is not in RAM. This is how it knows it isn't.
+        \item \textbf{Dirty bit}s are set when a page frame has been modified.
+        \item \textbf{Locality}: process executes in clustered pages (low fragmentation). Bad is opposite.
+        \item \textbf{Global allocation}: allows a proc. to select a replacement frame from a set of all frames, even if it's given to some other process; processes can steal frames.
+        \item \textbf{Working set allocation}: assumes processes execute in localities. Each process should be alloc'd enough frames for current set.
+        \item Which of the two above are more affected by bad locality? Working set as those with bad locality have poorly defined working sets, so more page faults.
+        \item Page fault timeline:
+        \begin{itemize}
+          \item OS blocks proc, puts in waiting queue
+          \item Ready queue proc. is selected to run
+          \item DMA is initiated to load faulted page
+          \item Page replacement strat. ran
+          \item Page table updated to reflect change
+        \end{itemize}
+        \item TRUE: When a DMA takes place, processor does other things.
+        \item FALSE: DMA interrupts CPU by stealing cycles.
+        \item Largest program that can execute on a comp. with 24-bit virtual addresses is a $2^{24}$ byte program.
+        \item Same question as \^ but with hardware: can't tell, need to know virt. size.
+        \item Address in a \textbf{TLB} entry \textbf{PTE} is physical.
+        \item Flags in a PTE: valid bit, reference bit, dirty bit.
+        \item \textbf{Hit-ratio}: in 2 level memory system (RAM-HD/cache-RAM), it is the frac of mem accesses found in master (first).
+        \item FALSE: Misses in the \textbf{TLB} guarantee entries in the page table entry--- \textit{X may not be resident in RAM}.
+        \item TRUE: It is possible that page tables are stored in virtual memory.
+        \item TRUE: page sizes must be large enough to offset high cost of page faults.
+        \item TRUE: in virt. mem. system, cannot run program whose size > main mem.
+        % Draw photos for the relationship between virtual address, TLB, page table, real address, main mem, and secondary mem
+        \item Valid bit states whether the page table entry has the disk address.
+        \item \textbf{Demand Paging}: only load virtual pages as accessed.
+        \item \textbf{Prepaging}: bring more pages in than needed, ones that follow.
+      \end{itemize}
 
     \subsection{OS Related Questions}
 

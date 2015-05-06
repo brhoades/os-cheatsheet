@@ -157,7 +157,7 @@
        \item Larger page sizes leads to some useless references being in memory taking up space.
       \end{itemize}
       % Paging algorithms, including OPT which requires prior knowledge for it to work... keeps pages in memory just right
-  \section{Scheduling}
+  \section{Uniprocessor Scheduling}
     \subsection{Aims}
       \begin{itemize}
        \item \textbf{Response Time}: time it takes a system to reactive to a given input (reduce).
@@ -199,8 +199,26 @@
          \item Shortest Process Next (SPN): Nonpreemptive, process with shortest \textbf{expected} processing time is next. For batch jobs, user is required to estimate the running time
                . For interactive jobs, OS predicts it. Short processes get priority here and long ones can be starved.
          \item Shortest Remaining Time (SRT): Preemptive version of \^. Achieves better turnaround time to \^ as a short job is given immediate preference to a long one. Hard to estimate remaining time.
-         \item Highest Response Ratio Next (HRRN): 
+         \item Highest Response Ratio Next (HRRN): Nonpreemptive, uses R= (time spent waiting + service time ) / service time decide next process. No starvation possible, shorter jobs preferred.
         \end{itemize}
+  \section{Multiprocessing}
+    \subsection{Issues}
+      \begin{itemize}
+        \item Multiprogramming usage--- should we allow one application to lock up several cores (maximum speedup)?
+        \item Unless a single queue is used for scheduling, it becomes more difficult to maintain specific disciplines.
+        \item When a single queue is used, a single process can be schedule to run on any processor (master node needed).
+        \item Preemptive schemes (RR) are costly to implement with a single queue approach.
+      \end{itemize}
+     \subsection{Real-time systems}
+      \begin{itemize}
+        \item Tasks or processes attempt to control/react to events which must keep up.
+        \item Correctness depends on both result AND time at delivery
+        \item \textbf{Hard real-time task}: must meet the deadline, causes catastrophic failure/errors w/o.
+        \item \textbf{Soft real-time task}: has a deadline that is desired. Makes sense to complete even if late.
+        \item \textbf{Periodic tasks}: Only one unit per period T, exactly T apart.
+        \item \textbf{Aperiodic task}: has a deadline by which it must finish/start, may have constraints both.
+      \end{itemize}
+
 
 
 

@@ -74,21 +74,6 @@
 \begin{document}
 
 \begin{multicols}{3}
-  \section{Definitions}
-    \begin{itemize}
-      \item \textbf{Operating Systems}: exploit hardware resources (many processors), provide a set of services to users, manage secondary memory and I/O, %
-          and provide networking/comm. support. Elements of an OS:
-      \begin{itemize}
-        \item Processor
-        \item Main Memory (real/primary)
-        \item I/O Modules: secondary memory devices, comms equipment, terminals
-        \item System bus: communication among processors, memory, and I/O modules
-       \end{itemize}
-       \item \textbf{Interrupts}: interrupts the normal sequence of execution. Improve processing efficiency and lets the processor not wait on things.
-       \item \textbf{ISR}: Interrupt service routine, handles interrupts. Whenever  there is an interrupt, control is transferred to this program.  %
-                       It determines the nature of the interrupt and performs the necessary actions to handle it.
-
-
    \section{Memory Management}
       \subsection{Requirements}
         \begin{itemize}
@@ -132,7 +117,6 @@
           % If this is on the test, slide 10 of chap7 has an example that looks decent...
           % http://i.brod.es/dpaEb.png
          \end{itemize}
-    \end{itemize}
     
     \section{Virtual Memory}
       % I'm skipping tons of stuff I _know_ here because of homework 2
@@ -352,29 +336,10 @@
         \end{itemize}
 
 
-
-
-
-
-
-
-
-      
-
-
-
-
-
-    
   \section{Glossary}
     \begin{itemize}
-      \item \textbf{Address Space} – The range of addresses available to a computer program
       \item \textbf{Address Translator} – A functional unit that transforms virtual addresses to real addresses
-      \item \textbf{Asynchronous Operation} – An operation that occurs without a regular or predictable time relationship to a specified event; 
-                              for example, the calling of an error diagnostic routine that may receive control at any time during the execution of a program.
-      \item \textbf{Atomic Operation} – An operation which cannot be split into more operations. Examples: primitive types: read and write, fetch-and-add, compare-and-swap. 
       \item \textbf{Busy waiting} – the repeated execution of a loop of code while waiting for an event to occur
-      \item \textbf{Consumable Resource} – only available once such as message send, also can cause \textbf{deadlocks}.
       \item \textbf{Context Switch} – an operation that switches the processor from one process to another, by saving all the process control block, registers, and other information for the first and 
                                       replacing them with the process information for the second
       \item \textbf{Direct Memory Access (DMA)} – a form of I/O in which a special module, called a DMA module, controls the exchange of data between main memory and an I/O device.  
@@ -383,14 +348,8 @@
       \item \textbf{Job Control language (JCL)} – a problem-oriented language that is designed to express statements in a job that are used to identify the job or to describe its requirements to an operating system
       \item \textbf{Kernel} – a portion of the operating system that includes the most heavily used portions of software.  Generally, the kernel is maintained permanently in main memory.  
               The kernel runs in a privileged mode and responds to calls from processes and interrupts from devices.
-      \item \textbf{Message} – a block of information that may be exchanged between processes as a means of communication.
-      \item \textbf{Preemption} – reclaiming a resource from a process before the process has finished using it.
-      \item \textbf{Process Image} – all of the ingredients of a process, including program, data, stack, and process control block
-      \item \textbf{Reusable Resource} – can be used several times, cause for \textbf{deadlock} often. semaphore, CPU, etc
       \item \textbf{Race Condition} – an undesirable situation that occurs when a device or system attempts to perform two or more operations at the same time, but because of the nature of the device or system, 
       the operations must be done in the proper sequence in order to be done correctly.
-      \item \textbf{Round Robin} – a scheduling algorithm in which processes are activated in a fixed cyclic order.  Those which cannot proceed because they are waiting for some event 
-                    (e.g., termination of a child process or an input/output operation) simply return control to the scheduler.
       \item \textbf{Time Sharing} – the concurrent use of a device by a number of users
       \item \textbf{Time Slicing} – a mode of operation in which two or more processes are assigned quanta of time on the same processor
     \end{itemize}

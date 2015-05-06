@@ -303,6 +303,55 @@
           \item Low level ports reserved for OS.
           \item Each port can be bound to an address and used by an application.
         \end{itemize}
+  \section{Distributed Processing}
+    \subsection{Applications}
+      \begin{itemize}
+        \item \textbf{Databases}:
+        \begin{itemize}
+          \item Databases is a very common family of distrib. proc w/ client/servers.
+          \item The server in a database maintains it
+          \item Clients use transactions to interact, usually over IP. Many clients can coexist.
+        \end{itemize}
+        \item Thinclients (dumb terminals / VM)
+        \item \textbf{Three tier models}:
+        \begin{itemize}
+          \item Application software distributed on all 3.
+          \item Users use a thin client, while the backend has ``legacy applications''
+          \item Middle tier has gateway, protocol conversion, mapping, and is both a client and a server
+        \end{itemize}
+      \end{itemize}
+     \subsection{Issues}
+       \begin{itemize}
+         \item Lack of standards leads to \textbf{middleware}.
+         \begin{itemize}
+           \item Sets of tools to provide uniform style of access and usage across a platform.
+           \item Provides standard programming interfaces/protocols to sit in the middle of client/servers.
+           \item Handles complexities and disparities.
+           \item \textbf{SOA}, service oriented architecture. Services with well defined interfaces are given to other groups to maintain.
+           \item XML via HTTP is a popular interface for communication between services.
+           \item RPC is another standard (remote procedure calls).
+         \end{itemize}
+         \item Message passing schemes
+         \begin{itemize}
+           \item Guarantees delivery if possible
+           \item Send the message out without reporting failure/success reduces overhead and allows queueing.
+           \item Blocking: send does not return control to sending process until sent, does not return control until ACK'd, or not returned until buffered for send.
+           \item Nonblocking: process is not suspended as result of send/received, difficult to debug but efficient.
+         \end{itemize}
+       \end{itemize}
+      \subsection{Clusters}
+        \begin{itemize}
+          \item Alternative to SMP--- group of interconnected comps working as unified source, acts as once machine.
+          \item SMP is easier to manage and configure.
+          \item SMP takes up less space, uses less power.
+          \item Clusters are better for incremental / abs scalability
+          \item \^ superior in terms of availability
+          \item \^ Better price/performance.
+          \item Load balancing is a problem for clusters.
+          \item Failure management is another issue--- failure tolerant or highly available?
+        \end{itemize}
+
+
 
 
 

@@ -363,7 +363,6 @@
          \item \textbf{Indexed Sequential Access}: pertaining to the organization and accessing of the records of a storage structure through an index of the keys that are stored in arbitrarily partitioned sequential files.
          \item \textbf{Logical Address}: a reference to a memory location independent of the current assignment of data to memory.  A translation must be made to a physical address before the memory access can be achieved.
          \item \textbf{Page}: in virtual storage, a fixed length block that has a virtual address and that is transferred as a unit between main memory and secondary memory.
-         \item \textbf{Page Fault}: occurs when the page containing a referenced word is not in main memory.  This causes an interrupt and requires that the proper page be brought into main memory.
          \item \textbf{Paging}: the transfer of pages between main memory and secondary memory.
          \item \textbf{Physical Address}: the absolute location of a unit of data in memory (e.g., word or byte in main memory, block on secondary memory).
          \item \textbf{Sequential Access}: the capability to enter data into a storage device or a data medium in the same sequence as the data are ordered or to obtain data in the same order as they were entered.
@@ -402,7 +401,23 @@
         \item FALSE: Misses in the \textbf{TLB} guarantee entries in the page table entry--- \textit{X may not be resident in RAM}.
         \item TRUE: It is possible that page tables are stored in virtual memory.
         \item TRUE: page sizes must be large enough to offset high cost of page faults.
-        \item TRUE: in virt. mem. system, cannot run program whose size > main mem.
+        \item TRUE: in virt. mem. system, cannot run program whose size $>$ main mem.
+        \item \textbf{Diagram for relationship between virtual memory components}:
+        \begin{itemize}
+          \item First unit is a virtual address box with two sections, page \# and offset.
+          \item Page \# has three arrows coming from it, the first arrow is labeled ``page fault'' and goes to a block
+                on a secondary memory column.
+          \item The block on the secondary memory column then goes to a block on main memory, the arrow is labeled ``load page''.
+          \item The second arrow on the first box for page \# goes to a sliver of a ``Page Table'' column where the transition is labeled ``TLB Miss''.
+          \item The sliver then goes to Real Address which, like Page Table, is a 2 part box with Frame \# and offset.
+          \item Offset then points to the same segment as load page does above in main memory, but with an ``offset''
+                to a certain part of it (the middle here).
+          \item ``Page \#'''s final entry in Virtual Address goes to the TLB (see mem management sec at top). It splits into
+                8 arrows and one segment is highlighted.
+          \item This one segment, called TLB hit, goes to frame \# on Real Address like TLB miss on the page table did (last bit).
+          \item The final transition is the offset for the Virtual Address. It goes directly to offset in physical address with no label.
+        \end{itemize}
+
         % Draw photos for the relationship between virtual address, TLB, page table, real address, main mem, and secondary mem
         \item Valid bit states whether the page table entry has the disk address.
         \item \textbf{Demand Paging}: only load virtual pages as accessed.
